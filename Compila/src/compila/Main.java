@@ -8,7 +8,7 @@ package compila;
  *
  * @author Augusto FADC
  */
-public class Compila {
+public class Main {
 
     /**
      * @param args the command line arguments
