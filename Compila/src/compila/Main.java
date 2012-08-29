@@ -4,8 +4,17 @@
  *
  */
 package compila;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Hashtable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -13,31 +22,52 @@ import java.util.Hashtable;
  */
 public class Main {
 
-    private static void verificarArquivoEntrada(String string) {
-        throw new UnsupportedOperationException("Not yet implemented");
+    static Hashtable<Lexema, Token> tabela = new Hashtable<Lexema, Token>();
+    static File arquivoEntrada;
+
+    private static boolean verificarArquivoEntrada(String string) {
+
+
+        arquivoEntrada = new File(string);
+        if (arquivoEntrada.exists()) {
+            return true;
+        } else {
+            return false;
+        }
     }
-    
-    
-    Hashtable<Lexema,Token> tabela = new Hashtable<Lexema, Token>();
-    
-    File arquivoEntrada;
-    
-    
-    
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        // TODO code application logic here
-        
-        
-        // @TODO Ler arquivo de entrada através do args[0] verificar se existe e etc
-        verificarArquivoEntrada(args[0]);
-        // @TODO Enquanto o arquivo não fechou fazer a análise léxica
-        AnaliseLexica analiseLexica = new AnaliseLexica();
-        analiseLexica.verificaString("");
-        
+    public static void main(String[] args) throws IOException {
 
+        // @TODO Ler arquivo de entrada através do args[0] verificar se existe e etc
+        if (verificarArquivoEntrada(args[0])) {
+
+            AnaliseLexica analiseLexica = new AnaliseLexica();
+
+            BufferedReader entrada = new BufferedReader(new FileReader(arquivoEntrada));
+            String[] linha;
+            while (entrada.ready()) {
+                linha = entrada.readLine().split(" ");
+                for (int i = 0; i < linha.length; i++) {
+                    analiseLexica.verificaString(linha[i]);
+                }
+            }
+            entrada.close();
+
+
+            // @TODO Criar while para fim de arquivo
+            // @TODO Criar while para fim de arquivo
+
+
+            analiseLexica.verificaString("");
+
+
+        } else {
+            // @TODO O arquivo encontrado não existe
+            System.out.format("O arquivo {0} não existe", args[0]);
+            //System.out.println("O arquivo  não existe");
+        }
     }
 }

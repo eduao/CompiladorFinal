@@ -9,6 +9,8 @@ package compila;
  * @author Augusto & Eduardo
  */
 public class AnaliseLexica {
+    
+    
 
     boolean verificaString(String string) {
        return false; 
