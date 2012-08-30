@@ -5,16 +5,11 @@
  */
 package compila;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Hashtable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -51,7 +46,7 @@ public class Main {
             while (entrada.ready()) {
                 linha = entrada.readLine().split(" ");
                 for (int i = 0; i < linha.length; i++) {
-                    analiseLexica.verificaString(linha[i]);
+                    analiseLexica.verificaString(linha[i].toCharArray());
                 }
             }
             entrada.close();
@@ -61,7 +56,7 @@ public class Main {
             // @TODO Criar while para fim de arquivo
 
 
-            analiseLexica.verificaString("");
+            //analiseLexica.verificaString("");
 
 
         } else {
