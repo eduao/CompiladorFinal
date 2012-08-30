@@ -20,6 +20,11 @@ public class AnaliseLexica {
     
     // @TODO Precisa criar o que Pode ser representado nos tokens
     Token verificaString(char[] string) {
+        
+        Token t = new Token();
+        Lexema l = new Lexema();
+        String lexema ="";
+        
         boolean continueAnalysing = true;
         int pos = -1;
         char estado = 0;
@@ -28,28 +33,41 @@ public class AnaliseLexica {
                 case 0:
                     char c = nextChar(string, pos);
                     if (isDelimitator(c)) {
+                        lexema.concat(c+"");
                         estado = 0;
                     } else if (isLetter(c)) {
+                        lexema.concat(c+"");
                         estado = 1;
                     } else if (c == '=') {
+                        lexema.concat(c+"");
                         estado = 3;
                     } else if (c == '(') {
+                        lexema.concat(c+"");
                         estado = 5;
                     } else if (c == ')') {
+                        lexema.concat(c+"");
                         estado = 7;
                     } else if (c == '+') {
+                        lexema.concat(c+"");
                         estado = 9;
                     } else if (c == '-') {
+                        lexema.concat(c+"");
                         estado = 10;
                     } else if (c == '*') {
+                        lexema.concat(c+"");
+                        
                         estado = 11;
                     } else if (c == '/') {
+                        lexema.concat(c+"");
                         estado = 12;
                     } else if (c == '<') {
+                        lexema.concat(c+"");
                         estado = 13;
                     } else if (c == '>') {
+                        lexema.concat(c+"");
                         estado = 17;
                     } else if (isDigit(c)) {
+                        lexema.concat(c+"");
                         estado = 20;
                     } else if (isEOF(c)) {
                         estado = 24;
@@ -61,66 +79,110 @@ public class AnaliseLexica {
                 case 1:
                     c = nextChar(string, pos);
                     if (isDigit(c) || isLetter(c)) {
+                        lexema.concat(c+"");
                         estado = 1;
                     } else {
+                        lexema.concat(c+"");
                         estado = 2;
                     }
                     break;
 
                 case 2:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um ID
                     break;
 
                 case 3:
                     c = nextChar(string, pos);
                     if (c == '=') {
+                        lexema.concat(c+"");
                         estado = 4;
                     } else {
+                        lexema.concat(c+"");
                         estado = 25;
                     }
                     break;
 
                 case 4:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
                     // retorna um operador relacional
                     estado = 0;
                     break;
 
                 case 5:
                     c = nextChar(string, pos);
+                    lexema.concat(c+"");
                     estado = 6;
                     break;
 
                 case 6:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
                     // retorna um caractere especial
                     estado = 0;
                     break;
 
                 case 7:
                     c = nextChar(string, pos);
+                    lexema.concat(c+"");
                     estado = 8;
                     break;
 
                 case 8:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um caractere especial
                     estado = 0;
                     break;
 
                 case 9:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um operador aritimetico
                     estado = 0;
                     break;
 
                 case 10:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um operador aritimetico
                     estado = 0;
                     break;
 
                 case 11:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um operador aritimetico
                     estado = 0;
                     break;
 
                 case 12:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um operador aritimetico
                     estado = 0;
                     break;
@@ -128,8 +190,10 @@ public class AnaliseLexica {
                 case 13:
                     c = nextChar(string, pos);
                     if (c == '=') {
+                        lexema.concat(c+"");
                         estado = 14;
                     } else if (c == '>') {
+                        lexema.concat(c+"");
                         estado = 15;
                     } else {
                         estado = 16;
@@ -137,16 +201,31 @@ public class AnaliseLexica {
                     break;
 
                 case 14:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um operador relacional
                     estado = 0;
                     break;
 
                 case 15:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um operador relacional
                     estado = 0;
                     break;
 
                 case 16:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um operador relacional
                     estado = 0;
                     break;
@@ -166,6 +245,11 @@ public class AnaliseLexica {
                     break;
 
                 case 19:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um operador relacional
                     estado = 0;
                     break;
@@ -182,7 +266,6 @@ public class AnaliseLexica {
                     break;
 
                 case 21:
-                    Main.tabela.put(new Lexema(),new Token());
                     c = nextChar(string, pos);
                     if (isDigit(c)) {
                         estado = 21;
@@ -192,11 +275,21 @@ public class AnaliseLexica {
                     break;
 
                 case 22:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um numero
                     estado = 0;
                     break;
 
                 case 23:// aceitacao
+                    l.setLexema(lexema);
+                    t.setToken("constante");
+                    Main.tabela.put (l, t);
+                    pos--;
+                    estado = 0;
                     // retorna um numero
                     estado = 0;
                     break;
