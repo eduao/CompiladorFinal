@@ -9,16 +9,9 @@ package compila;
  * @author Augusto & Eduardo
  */
 public class AnaliseLexica {
-    
-    // @TODO Precisa criar o que Pode ser representado nos tokens
-    
-    
-    
 
+    // @TODO Precisa criar o que Pode ser representado nos tokens
     Token verificaString(String string) {
-        
-        
-       return new Token(); 
+        return new Token();
     }
-    
 }

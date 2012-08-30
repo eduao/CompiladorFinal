@@ -9,11 +9,15 @@ package compila;
  * @author Eduardo
  */
 public class Lexema {
-    
+
     private String lexema; // constante = "3", palavra reservada = "IF", etc...
-    
+
     /* Set's e Get's */
-    public String getLexema(){ return lexema; }
-    public void setLexema(String t){lexema = t;}
-    
+    public String getLexema() {
+        return lexema;
+    }
+
+    public void setLexema(String t) {
+        lexema = t;
+    }
 }
