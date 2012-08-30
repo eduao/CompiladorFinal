@@ -10,10 +10,15 @@ package compila;
  */
 public class AnaliseLexica {
     
+    // @TODO Precisa criar o que Pode ser representado nos tokens
+    
+    
     
 
-    boolean verificaString(String string) {
-       return false; 
+    Token verificaString(String string) {
+        
+        
+       return new Token(); 
     }
     
 }
