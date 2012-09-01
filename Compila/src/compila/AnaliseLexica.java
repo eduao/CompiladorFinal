@@ -10,6 +10,16 @@ package compila;
  */
 public class AnaliseLexica {
     
+    
+    
+    void insereTabela(Lexema l, Token t){
+        if (!eLexemaUsado(l) && !ePalavraReservada(l)){
+            Main.tabela.put(l, t);
+        }else{
+            // Não sei o que pose entrar aqui.... :'/
+        }
+    }
+    
     boolean eLexemaUsado(Lexema l){
         if (Main.tabela.containsKey(l)){
             return true;
