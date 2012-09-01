@@ -18,13 +18,11 @@ import java.util.Hashtable;
 public class Main {
 
     static Hashtable<Lexema, Token> tabela = new Hashtable<Lexema, Token>();
-    static Hashtable< Token, ID> palavraReservada = new Hashtable< Token, ID>(); 
-    
+    static Hashtable< Token, ID> palavraReservada = new Hashtable< Token, ID>();
     
     static File arquivoEntrada;
 
     private static boolean verificarArquivoEntrada(String string) {
-
 
         arquivoEntrada = new File(string);
         if (arquivoEntrada.exists()) {
@@ -56,13 +54,7 @@ public class Main {
                 }
             }
             entrada.close();
-
-
             // @TODO Criar while para fim de arquivo
-            // @TODO Criar while para fim de arquivo
-
-
-            //analiseLexica.verificaString("");
 
 
         } else {
@@ -109,10 +101,5 @@ public class Main {
         palavraReservada.put(new Token("/"), new ID(34));
         palavraReservada.put(new Token("inicio"), new ID(35));
         palavraReservada.put(new Token("fim"), new ID(36));
-        
-        
-        
-        
-        
     }
 }

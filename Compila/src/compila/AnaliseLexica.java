@@ -10,6 +10,19 @@ package compila;
  */
 public class AnaliseLexica {
     
+    boolean eLexemaUsado(Lexema l){
+        if (Main.tabela.containsKey(l)){
+            return true;
+        }
+        return false;
+    }
+    
+    boolean ePalavraReservada(Lexema l){
+        if (Main.palavraReservada.containsKey(new Token(l.getLexema()))){
+            return true;
+        }
+        return false;
+    }
     
     char nextChar(char[] s, int posicao){
         posicao++;
