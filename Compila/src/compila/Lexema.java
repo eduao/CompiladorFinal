@@ -20,4 +20,14 @@ public class Lexema {
     public void setLexema(String t) {
         lexema = t;
     }
+
+    public Lexema(String lexema) {
+        this.lexema = lexema;
+    }
+
+    public Lexema() {
+    }
+    
+    
+    
 }

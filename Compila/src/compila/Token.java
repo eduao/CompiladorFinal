@@ -24,4 +24,13 @@ public class Token {
     public void setToken(String t) {
         token = t;
     }
+
+    public Token(String token) {
+        this.token = token;
+    }
+
+    public Token() {
+    }
+    
+    
 }
