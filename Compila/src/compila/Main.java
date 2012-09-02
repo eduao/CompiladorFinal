@@ -54,11 +54,12 @@ public class Main {
             System.out.println("Verificando se o arquivo está léxicamente correto...");
             for (int numeroLinha = 1; entrada.ready(); numeroLinha++) {
                 linha = entrada.readLine();
-                analiseLexica.verificaString(linha.toCharArray(), numeroLinha);
+                analiseLexica.verificaString((linha+"\n").toCharArray(), numeroLinha);
             }
             entrada.close();
             // @TODO Criar while para fim de arquivo
             System.out.println("O arquivo está léxicamente correto!");
+            imprimirTabelaDeSimbolos();
 
         } else {
             // @TODO O arquivo encontrado não existe
@@ -66,5 +67,15 @@ public class Main {
             System.out.format("O arquivo não existe\n");
             //System.out.println("O arquivo  não existe");
         }
+    }
+    
+    
+    public static void imprimirTabelaDeSimbolos (){
+        System.out.println("======================================================");
+        System.out.println("Imprimindo a tabela de simbolos...");
+        for (Lexema lexema : tabelaDeSimbolos.keySet()) {
+            System.out.println("["+ lexema.getLexema() + ", " + tabelaDeSimbolos.get(lexema).getToken() + "]");
+        }
+        System.out.println("======================================================");
     }
 }

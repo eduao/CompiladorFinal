@@ -16,24 +16,23 @@ public class AnaliseLexica {
     public AnaliseLexica() {
     }
 
-    synchronized void insereTabela(Lexema l, Token t) {
-        if (!eLexemaUsado(l) && !ePalavraReservada(l)) {
-            Main.tabelaDeSimbolos.put(l, t);
-        } else {
-            // Não sei o que pose entrar aqui.... :'/
-        }
-    }
 
-    boolean eLexemaUsado(Lexema l) {
-        if (Main.tabelaDeSimbolos.containsKey(l)) {
-            return true;
+    boolean eLexemaUsado(Lexema lexema) {
+        //return Main.tabelaDeSimbolos.containsKey(l.getLexema());
+        for (Lexema l : Main.tabelaDeSimbolos.keySet()) {
+            if (l.getLexema().equals(lexema.getLexema())){
+                return true;
+            }
         }
         return false;
     }
 
-    boolean ePalavraReservada(Lexema l) {
-        if (Main.tabelaDePalavrasReservadas.containsKey(new Token(l.getLexema()))) {
-            return true;
+    boolean ePalavraReservada(Lexema lexema) {
+        //return Main.tabelaDePalavrasReservadas.containsKey(l.getLexema());
+        for (Token t : Main.tabelaDePalavrasReservadas.keySet()) {
+            if (t.getToken().equals(lexema.getLexema())){
+                return true;
+            }
         }
         return false;
     }
@@ -59,73 +58,73 @@ public class AnaliseLexica {
                 case 0:
                     c = nextChar(string, pos);
                     if (c == ':') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 1;
                     } else if (c == ';') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 2;
                     } else if (eDelimitador(c)) {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 3;
                     } else if (c == '{') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 4;
                     } else if (c == '}') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 5;
                     } else if (c == '[') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 6;
                     } else if (c == ']') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 7;
                     } else if (c == '\'') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 8;
                     } else if (c == '\"') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 9;
                     } else if (c == '!') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 10;
                     } else if (c == '?') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 11;
                     } else if (eLetra(c)) {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 12;
                     } else if (c == '=') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 14;
                     } else if (c == '(') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 15;
                     } else if (c == ')') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 16;
                     } else if (c == '+') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 17;
                     } else if (c == '-') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 18;
                     } else if (c == '*') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 19;
                     } else if (c == '/') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 20;
                     } else if (c == '<') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 21;
                     } else if (c == '>') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 25;
                     } else if (c == '.') {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 32;
                     } else if (eNumero(c)) {
-                        lexema[0].concat("" + c);
+                        lexema[0] = lexema[0].concat("" + c);
                         estado[0] = 28;
                     } else {
                         falhar(numeroLinha, pos[0], "Um token não pode começar com o simbolo '" + c + "'.");
@@ -133,53 +132,53 @@ public class AnaliseLexica {
                     break;
 
                 case 1://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 2://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 3://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 4://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 5://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 6://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 7://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 8://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 9://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 10://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 11://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 12:
                     c = nextChar(string, pos);
                     if (eNumero(c) || eLetra(c)) {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 12;
                     } else {
                         estado[0] = 13;
@@ -187,43 +186,43 @@ public class AnaliseLexica {
                     break;
 
                 case 13://aceitação
-                    inserirSimbolo(lexema, pos, estado);
+                    inserirSimbolo(lexema,"", pos, estado);
                     break;
                 case 14://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 15://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 16://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 17://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 18://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 19://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 20://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 21:
                     c = nextChar(string, pos);
                     if (c == '=') {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 23;
                     } else if (c == '>') {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 24;
                     } else {
                         estado[0] = 22;
@@ -231,21 +230,21 @@ public class AnaliseLexica {
                     break;
 
                 case 22://aceitação
-                    inserirSimbolo(lexema, pos, estado);
+                    inserirSimbolo(lexema,"", pos, estado);
                     break;
 
                 case 23://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 24://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 25:
                     c = nextChar(string, pos);
                     if (c == '=') {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 27;
                     } else {
                         estado[0] = 26;
@@ -253,35 +252,36 @@ public class AnaliseLexica {
                     break;
 
                 case 26://aceitação
-                    inserirSimbolo(lexema, pos, estado);
+                    inserirSimbolo(lexema,"", pos, estado);
                     break;
 
                 case 27://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 case 28:
                     c = nextChar(string, pos);
                     if (eNumero(c)) {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 29;
                     } else if (c == '.') {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 32;
-                    }else{
+                    } else {
                         estado[0] = 37;
-                    };
+                    }
+                    ;
                     break;
 
                 case 29:
                     c = nextChar(string, pos);
                     if (eNumero(c)) {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 30;
                     } else if (c == '.') {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 32;
-                    }else{
+                    } else {
                         estado[0] = 37;
                     }
                     break;
@@ -289,12 +289,12 @@ public class AnaliseLexica {
                 case 30:
                     c = nextChar(string, pos);
                     if (eNumero(c)) {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 31;
                     } else if (c == '.') {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 32;
-                    }else{
+                    } else {
                         estado[0] = 37;
                     }
                     break;
@@ -302,12 +302,11 @@ public class AnaliseLexica {
                 case 31:
                     c = nextChar(string, pos);
                     if (c == '.') {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 32;
-                    }else if (eNumero(c)){
+                    } else if (eNumero(c)) {
                         falhar(numeroLinha, pos[0], "Um número ou uma parte fracionária não podem conter 5 ou mais dígitos!");
-                    }
-                    else{
+                    } else {
                         estado[0] = 37;
                     }
                     break;
@@ -315,11 +314,11 @@ public class AnaliseLexica {
                 case 32:
                     c = nextChar(string, pos);
                     if (eNumero(c)) {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 33;
                     } else if (c == '.') {
                         falhar(numeroLinha, pos[0], "Um número não pode contar duas partes fracionárias!");
-                    }else{
+                    } else {
                         estado[0] = 37;
                     }
                     break;
@@ -327,11 +326,11 @@ public class AnaliseLexica {
                 case 33:
                     c = nextChar(string, pos);
                     if (eNumero(c)) {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 34;
                     } else if (c == '.') {
                         falhar(numeroLinha, pos[0], "Um número não pode contar duas partes fracionárias!");
-                    }else{
+                    } else {
                         estado[0] = 37;
                     }
                     break;
@@ -339,11 +338,11 @@ public class AnaliseLexica {
                 case 34:
                     c = nextChar(string, pos);
                     if (eNumero(c)) {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 35;
                     } else if (c == '.') {
                         falhar(numeroLinha, pos[0], "Um número não pode contar duas partes fracionárias!");
-                    }else{
+                    } else {
                         estado[0] = 37;
                     }
                     break;
@@ -351,11 +350,11 @@ public class AnaliseLexica {
                 case 35:
                     c = nextChar(string, pos);
                     if (eNumero(c)) {
-                        lexema[0].concat(c + "");
+                        lexema[0] = lexema[0].concat(c + "");
                         estado[0] = 36;
                     } else if (c == '.') {
                         falhar(numeroLinha, pos[0], "Um número não pode contar duas partes fracionárias!");
-                    }else{
+                    } else {
                         estado[0] = 37;
                     }
                     break;
@@ -366,13 +365,13 @@ public class AnaliseLexica {
                         falhar(numeroLinha, pos[0], "Um número ou uma parte fracionária não podem conter 5 ou mais dígitos!");
                     } else if (c == '.') {
                         falhar(numeroLinha, pos[0], "Um número não pode contar duas partes fracionárias!");
-                    }else{
+                    } else {
                         estado[0] = 37;
                     }
                     break;
 
                 case 37://aceitação
-                    inserirSimbolo(lexema, estado);
+                    inserirSimbolo(lexema,"", estado);
                     break;
 
                 default:
@@ -383,18 +382,29 @@ public class AnaliseLexica {
     }
 
     //usado quando um é um outro simbolo NÃO pertencent ao token que leva ao estado de aceitação
-    public void inserirSimbolo(String[] lexema, int[] pos, int[] estado) {
-        Main.tabelaDeSimbolos.put(new Lexema(new String(lexema[0])), new Token(""));
+    public void inserirSimbolo(String[] lexema,String token, int[] pos, int[] estado) {
+        Lexema l = new Lexema(lexema[0]);
+        Token t = new Token(token);
         pos[0]--;
         estado[0] = 0;
         lexema[0] = "";
+        if (!eLexemaUsado(l) && !ePalavraReservada(l)) {
+            Main.tabelaDeSimbolos.put(l, t);
+        }
     }
 
     //usado quando um é um simbolo pertencent ao token que leva ao estado de aceitação
-    public void inserirSimbolo(String[] lexema, int[] estado) {
-        Main.tabelaDeSimbolos.put(new Lexema(new String(lexema[0])), new Token(""));
+    public void inserirSimbolo(String[] lexema,String token, int[] estado) {
+        Lexema l = new Lexema(lexema[0]);
+        Token t = new Token(token);
         estado[0] = 0;
         lexema[0] = "";
+        if (!eLexemaUsado(l) && !ePalavraReservada(l)) {
+            Main.tabelaDeSimbolos.put(l, t);
+        }
+        
+
+
     }
 
     public boolean eDelimitador(char c) {
