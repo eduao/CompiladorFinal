@@ -4,18 +4,21 @@
  */
 package compila;
 
-
-
 /**
  *
  * @author Eduardo
  */
 public class Token {
-    
-    
+
     private String token; // constante, palavra reservada, etc...
-    
-    
+
+    public Token(String token) {
+        this.token = token;
+    }
+
+    public Token() {
+    }
+
     /* Set's e Get's */
     public String getToken() {
         return token;
@@ -24,13 +27,4 @@ public class Token {
     public void setToken(String t) {
         token = t;
     }
-
-    public Token(String token) {
-        this.token = token;
-    }
-
-    public Token() {
-    }
-    
-    
 }

@@ -16,7 +16,7 @@ public class AnaliseLexica {
     public AnaliseLexica() {
     }
 
-    void insereTabela(Lexema l, Token t) {
+    synchronized void insereTabela(Lexema l, Token t) {
         if (!eLexemaUsado(l) && !ePalavraReservada(l)) {
             Main.tabelaDeSimbolos.put(l, t);
         } else {
@@ -48,361 +48,356 @@ public class AnaliseLexica {
 
     // @TODO Precisa criar o que Pode ser representado nos tokens
     void verificaString(char[] string, int numeroLinha) {
-        Token t = new Token();
-        Lexema l = new Lexema();
-        String lexema = "";
+        String lexema[] = {""};
 
         boolean continueAnalysing = true;
         int pos[] = {-1};
-        char estado = 0;
+        int estado[] = {0};
         char c = 0;
         while (pos[0] < string.length) {
-            switch (estado) {
+            switch (estado[0]) {
                 case 0:
                     c = nextChar(string, pos);
-                    if (isDelimitator(c)) {
-                        estado = 0;
-                    } else if (isLetter(c)) {
-                        lexema.concat(c + "");
-                        estado = 1;
-                    } else if (isDigit(c)) {
-                        lexema.concat(c + "");
-                        estado = 20;
-                    } else if (isEOF(c)) {
-                        estado = 24;
-                    } else if (c == '=') {
-                        lexema.concat(c + "");
-                        estado = 3;
-                    } else if (c == '(') {
-                        lexema.concat(c + "");
-                        estado = 5;
-                    } else if (c == ')') {
-                        lexema.concat(c + "");
-                        estado = 7;
-                    } else if (c == '+') {
-                        lexema.concat(c + "");
-                        estado = 9;
-                    } else if (c == '-') {
-                        lexema.concat(c + "");
-                        estado = 10;
-                    } else if (c == '*') {
-                        lexema.concat(c + "");
-                        estado = 11;
-                    } else if (c == '/') {
-                        lexema.concat(c + "");
-                        estado = 12;
-                    } else if (c == '<') {
-                        lexema.concat(c + "");
-                        estado = 13;
-                    } else if (c == '>') {
-                        lexema.concat(c + "");
-                        estado = 17;
+                    if (c == ':') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 1;
                     } else if (c == ';') {
-                        lexema.concat(c + "");
-                        estado = 26;
-                    } else if (c == '$') {
-                        lexema.concat(c + "");
-                        estado = 27;
-                    } else if (c == ':') {
-                        lexema.concat(c + "");
-                        estado = 28;
-                    } else if (c == '\"') {
-                        lexema.concat(c + "");
-                        estado = 29;
+                        lexema[0].concat("" + c);
+                        estado[0] = 2;
+                    } else if (eDelimitador(c)) {
+                        lexema[0].concat("" + c);
+                        estado[0] = 3;
+                    } else if (c == '{') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 4;
+                    } else if (c == '}') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 5;
+                    } else if (c == '[') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 6;
+                    } else if (c == ']') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 7;
                     } else if (c == '\'') {
-                        lexema.concat(c + "");
-                        estado = 30;
-                    } else if (c == '/') {
-                        lexema.concat(c + "");
-                        estado = 31;
+                        lexema[0].concat("" + c);
+                        estado[0] = 8;
+                    } else if (c == '\"') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 9;
                     } else if (c == '!') {
-                        lexema.concat(c + "");
-                        estado = 32;
+                        lexema[0].concat("" + c);
+                        estado[0] = 10;
                     } else if (c == '?') {
-                        lexema.concat(c + "");
-                        estado = 33;
-                    } else {
-                        falhar(numeroLinha, pos[0], "Um lexema não pode comecar com o caractere '" + c + "'");
-                    }
-                    break;
-
-                // l   {l,d}
-                case 1:
-                    c = nextChar(string, pos);
-                    if (isDigit(c) || isLetter(c)) {
-                        lexema.concat(c + "");
-                        estado = 1;
-                    } else {
-                        lexema.concat(c + "");
-                        estado = 2;
-                    }
-                    break;
-
-                    // outro   -(l,d)
-                case 2:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    break;
-
-                    // =
-                case 3:
-                    c = nextChar(string, pos);
-                    if (c == '=') {
-                        lexema.concat(c + "");
-                        estado = 4;
-                    } else {
-                        lexema.concat(c + "");
-                        estado = 25;
-                    }
-                    break;
-
-                    // =
-                case 4:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    break;
-                    
-                    // (
-                case 5:
-                    c = nextChar(string, pos);
-                    lexema.concat(c + "");
-                    estado = 6;
-                    break;
-
-                case 6:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    break;
-
-                case 7:
-                    c = nextChar(string, pos);
-                    lexema.concat(c + "");
-                    estado = 8;
-                    break;
-
-                case 8:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    break;
-
-                case 9:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    break;
-
-                case 10:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    estado = 0;
-                    break;
-
-                case 11:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    estado = 0;
-                    break;
-
-                case 12:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    estado = 0;
-                    break;
-
-                case 13:
-                    c = nextChar(string, pos);
-                    if (c == '=') {
-                        lexema.concat(c + "");
-                        estado = 14;
+                        lexema[0].concat("" + c);
+                        estado[0] = 11;
+                    } else if (eLetra(c)) {
+                        lexema[0].concat("" + c);
+                        estado[0] = 12;
+                    } else if (c == '=') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 14;
+                    } else if (c == '(') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 15;
+                    } else if (c == ')') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 16;
+                    } else if (c == '+') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 17;
+                    } else if (c == '-') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 18;
+                    } else if (c == '*') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 19;
+                    } else if (c == '/') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 20;
+                    } else if (c == '<') {
+                        lexema[0].concat("" + c);
+                        estado[0] = 21;
                     } else if (c == '>') {
-                        lexema.concat(c + "");
-                        estado = 15;
-                    } else {
-                        estado = 16;
-                    }
-                    break;
-
-                case 14:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    estado = 0;
-                    break;
-
-                case 15:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    estado = 0;
-                    break;
-
-                case 16:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    estado = 0;
-                    break;
-
-                case 17:
-                    c = nextChar(string, pos);
-                    if (c == '=') {
-                        estado = 19;
-                    } else {
-                        estado = 18;
-                    }
-                    break;
-
-                case 18:// aceitacao
-                    estado = 0;
-                    break;
-
-                case 19:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    estado = 0;
-                    break;
-
-                case 20:
-                    c = nextChar(string, pos);
-                    if (isDigit(c)) {
-                        estado = 20;
+                        lexema[0].concat("" + c);
+                        estado[0] = 25;
                     } else if (c == '.') {
-                        estado = 21;
+                        lexema[0].concat("" + c);
+                        estado[0] = 32;
+                    } else if (eNumero(c)) {
+                        lexema[0].concat("" + c);
+                        estado[0] = 28;
                     } else {
-                        estado = 23;
+                        falhar(numeroLinha, pos[0], "Um token não pode começar com o simbolo '" + c + "'.");
                     }
+                    break;
+
+                case 1://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 2://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 3://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 4://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 5://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 6://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 7://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 8://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 9://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 10://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 11://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 12:
+                    c = nextChar(string, pos);
+                    if (eNumero(c) || eLetra(c)) {
+                        lexema[0].concat(c + "");
+                        estado[0] = 12;
+                    } else {
+                        estado[0] = 13;
+                    }
+                    break;
+
+                case 13://aceitação
+                    inserirSimbolo(lexema, pos, estado);
+                    break;
+                case 14://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 15://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 16://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 17://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 18://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 19://aceitação
+                    inserirSimbolo(lexema, estado);
+                    break;
+
+                case 20://aceitação
+                    inserirSimbolo(lexema, estado);
                     break;
 
                 case 21:
                     c = nextChar(string, pos);
-                    if (isDigit(c)) {
-                        estado = 21;
-                    } else if (c == '.') {
-                        falhar(numeroLinha, pos[0], "Um número não pode conter dois '.'s.");
+                    if (c == '=') {
+                        lexema[0].concat(c + "");
+                        estado[0] = 23;
+                    } else if (c == '>') {
+                        lexema[0].concat(c + "");
+                        estado[0] = 24;
                     } else {
-                        estado = 22;
+                        estado[0] = 22;
                     }
                     break;
 
-                case 22:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    estado = 0;
+                case 22://aceitação
+                    inserirSimbolo(lexema, pos, estado);
                     break;
 
-                case 23:// aceitacao
-                    l.setLexema(lexema);
-                    t.setToken("constante");
-                    Main.tabelaDeSimbolos.put(l, t);
-                    pos[0]--;
-                    estado = 0;
-                    estado = 0;
+                case 23://aceitação
+                    inserirSimbolo(lexema, estado);
                     break;
 
-                case 24:// aceitacao
-                    System.out.println("fim de arquivo");
-                    continueAnalysing = false;
+                case 24://aceitação
+                    inserirSimbolo(lexema, estado);
                     break;
 
                 case 25:
                     c = nextChar(string, pos);
-                    estado = 0;
+                    if (c == '=') {
+                        lexema[0].concat(c + "");
+                        estado[0] = 27;
+                    } else {
+                        estado[0] = 26;
+                    }
                     break;
 
-                // ;
-                case 26:// aceitacao
-                    c = nextChar(string, pos);
-                    // 
-                    estado = 0;
+                case 26://aceitação
+                    inserirSimbolo(lexema, pos, estado);
                     break;
 
-                // $
-                case 27:// aceitacao
-                    c = nextChar(string, pos);
-                    // 
-                    estado = 0;
+                case 27://aceitação
+                    inserirSimbolo(lexema, estado);
                     break;
 
-                // :
-                case 28:// aceitacao
+                case 28:
                     c = nextChar(string, pos);
-                    // 
-                    estado = 0;
+                    if (eNumero(c)) {
+                        lexema[0].concat(c + "");
+                        estado[0] = 29;
+                    } else if (c == '.') {
+                        lexema[0].concat(c + "");
+                        estado[0] = 32;
+                    }else{
+                        estado[0] = 37;
+                    };
                     break;
 
-                // "
-                case 29:// aceitacao
+                case 29:
                     c = nextChar(string, pos);
-                    // 
-                    estado = 0;
+                    if (eNumero(c)) {
+                        lexema[0].concat(c + "");
+                        estado[0] = 30;
+                    } else if (c == '.') {
+                        lexema[0].concat(c + "");
+                        estado[0] = 32;
+                    }else{
+                        estado[0] = 37;
+                    }
                     break;
 
-                // '
-                case 30:// aceitacao
+                case 30:
                     c = nextChar(string, pos);
-                    estado = 0;
+                    if (eNumero(c)) {
+                        lexema[0].concat(c + "");
+                        estado[0] = 31;
+                    } else if (c == '.') {
+                        lexema[0].concat(c + "");
+                        estado[0] = 32;
+                    }else{
+                        estado[0] = 37;
+                    }
                     break;
 
-                // /
-                case 31:// aceitacao
+                case 31:
                     c = nextChar(string, pos);
-                    estado = 0;
+                    if (c == '.') {
+                        lexema[0].concat(c + "");
+                        estado[0] = 32;
+                    }else if (eNumero(c)){
+                        falhar(numeroLinha, pos[0], "Um número ou uma parte fracionária não podem conter 5 ou mais dígitos!");
+                    }
+                    else{
+                        estado[0] = 37;
+                    }
                     break;
 
-                // !
-                case 32:// aceitacao
+                case 32:
                     c = nextChar(string, pos);
-                    estado = 0;
+                    if (eNumero(c)) {
+                        lexema[0].concat(c + "");
+                        estado[0] = 33;
+                    } else if (c == '.') {
+                        falhar(numeroLinha, pos[0], "Um número não pode contar duas partes fracionárias!");
+                    }else{
+                        estado[0] = 37;
+                    }
                     break;
 
-                // ?
-                case 33:// aceitacao
+                case 33:
                     c = nextChar(string, pos);
-                    estado = 0;
+                    if (eNumero(c)) {
+                        lexema[0].concat(c + "");
+                        estado[0] = 34;
+                    } else if (c == '.') {
+                        falhar(numeroLinha, pos[0], "Um número não pode contar duas partes fracionárias!");
+                    }else{
+                        estado[0] = 37;
+                    }
+                    break;
+
+                case 34:
+                    c = nextChar(string, pos);
+                    if (eNumero(c)) {
+                        lexema[0].concat(c + "");
+                        estado[0] = 35;
+                    } else if (c == '.') {
+                        falhar(numeroLinha, pos[0], "Um número não pode contar duas partes fracionárias!");
+                    }else{
+                        estado[0] = 37;
+                    }
+                    break;
+
+                case 35:
+                    c = nextChar(string, pos);
+                    if (eNumero(c)) {
+                        lexema[0].concat(c + "");
+                        estado[0] = 36;
+                    } else if (c == '.') {
+                        falhar(numeroLinha, pos[0], "Um número não pode contar duas partes fracionárias!");
+                    }else{
+                        estado[0] = 37;
+                    }
+                    break;
+
+                case 36:
+                    c = nextChar(string, pos);
+                    if (eNumero(c)) {
+                        falhar(numeroLinha, pos[0], "Um número ou uma parte fracionária não podem conter 5 ou mais dígitos!");
+                    } else if (c == '.') {
+                        falhar(numeroLinha, pos[0], "Um número não pode contar duas partes fracionárias!");
+                    }else{
+                        estado[0] = 37;
+                    }
+                    break;
+
+                case 37://aceitação
+                    inserirSimbolo(lexema, estado);
                     break;
 
                 default:
+
                     break;
             }
         }
     }
 
-    public boolean isDelimitator(char c) {
+    //usado quando um é um outro simbolo NÃO pertencent ao token que leva ao estado de aceitação
+    public void inserirSimbolo(String[] lexema, int[] pos, int[] estado) {
+        Main.tabelaDeSimbolos.put(new Lexema(new String(lexema[0])), new Token(""));
+        pos[0]--;
+        estado[0] = 0;
+        lexema[0] = "";
+    }
+
+    //usado quando um é um simbolo pertencent ao token que leva ao estado de aceitação
+    public void inserirSimbolo(String[] lexema, int[] estado) {
+        Main.tabelaDeSimbolos.put(new Lexema(new String(lexema[0])), new Token(""));
+        estado[0] = 0;
+        lexema[0] = "";
+    }
+
+    public boolean eDelimitador(char c) {
         // 10 = LINE FEED
         if (c == ' ' || c == '\t' || c == '\r' || c == '\n' || c == 10) {
             return true;
@@ -411,7 +406,7 @@ public class AnaliseLexica {
         }
     }
 
-    public boolean isLetter(char c) {
+    public boolean eLetra(char c) {
         if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) {
             return true;
         } else {
@@ -419,7 +414,7 @@ public class AnaliseLexica {
         }
     }
 
-    public boolean isDigit(char c) {
+    public boolean eNumero(char c) {
         if ((c >= '0' && c <= '9')) {
             return true;
         } else {
@@ -438,7 +433,7 @@ public class AnaliseLexica {
         System.exit(-1);
     }
 
-    public boolean isEOF(char c) {
+    public boolean eFimDeArquivo(char c) {
         if (c == (char) -1) {
             return true;
         } else {

@@ -9,8 +9,15 @@ package compila;
  * @author Eduardo
  */
 public class Lexema {
-
     private String lexema; // constante = "3", palavra reservada = "IF", etc...
+    
+    public Lexema(String lexema) {
+        this.lexema = lexema;
+    }
+
+    public Lexema() {
+    }
+    
 
     /* Set's e Get's */
     public String getLexema() {
@@ -20,14 +27,4 @@ public class Lexema {
     public void setLexema(String t) {
         lexema = t;
     }
-
-    public Lexema(String lexema) {
-        this.lexema = lexema;
-    }
-
-    public Lexema() {
-    }
-    
-    
-    
 }
