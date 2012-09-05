@@ -4,9 +4,6 @@
  */
 package compila;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  *
  * @author Augusto & Eduardo & Kassia
@@ -29,11 +26,11 @@ public class AnaliseLexica {
 
     boolean ePalavraReservada(Lexema lexema) {
         //return Main.tabelaDePalavrasReservadas.containsKey(l.getLexema());
-        for (Token t : Main.tabelaDePalavrasReservadas.keySet()) {
+       /* for (Token t : Main.tabelaDePalavrasReservadas.keySet()) {
             if (t.getToken().equals(lexema.getLexema())){
                 return true;
             }
-        }
+        }*/
         return false;
     }
 
@@ -389,7 +386,7 @@ public class AnaliseLexica {
         estado[0] = 0;
         lexema[0] = "";
         if (!eLexemaUsado(l) && !ePalavraReservada(l)) {
-            Main.tabelaDeSimbolos.put(l, t);
+           // Main.tabelaDeSimbolos.put(l, t);
         }
     }
 
@@ -400,7 +397,7 @@ public class AnaliseLexica {
         estado[0] = 0;
         lexema[0] = "";
         if (!eLexemaUsado(l) && !ePalavraReservada(l)) {
-            Main.tabelaDeSimbolos.put(l, t);
+           // Main.tabelaDeSimbolos.put(l, t);
         }
         
 

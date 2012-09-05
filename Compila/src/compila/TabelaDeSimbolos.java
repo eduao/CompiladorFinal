@@ -10,5 +10,15 @@ import java.util.Hashtable;
  *
  * @author Augusto FADC
  */
-public class TabelaDeSimbolos extends Hashtable<Lexema, Token> {
+public class TabelaDeSimbolos{
+
+    public TabelaDeSimbolos() {
+        //carregarPalavrasReservadas();
+    }
+    
+    
+    
+    
+
+    
 }

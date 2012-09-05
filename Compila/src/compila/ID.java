@@ -16,7 +16,7 @@ class ID {
         this.identificador = identificador;
     }
 
-    public int getIdentificador() {
+    public int getID() {
         return identificador;
     }
 
