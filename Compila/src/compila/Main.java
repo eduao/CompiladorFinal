@@ -26,7 +26,7 @@ public class Main {
     static Hashtable<String,Integer> tabelaDeSimbolos = new Hashtable<String, Integer>();
     //static TabelaDePalavrasReservadas tabelaDePalavrasReservadas;
     static File arquivoEntrada;
-    static String nomeArquivoEntrada = "teste.txt";
+    static String nomeArquivoEntrada = "exemplo2.gl";
     static FileInputStream fis;
     static InputStreamReader br;
     
@@ -103,7 +103,7 @@ public class Main {
             carregarPalavrasReservadas();
             AnalisadorLexico al = new AnalisadorLexico();
             br.close();
-            imprimirTabelaDeSimbolos();
+            //imprimirTabelaDeSimbolos();
         
         } else {
             // @TODO O arquivo encontrado não existe

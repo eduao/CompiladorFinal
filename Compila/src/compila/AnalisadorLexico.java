@@ -46,7 +46,8 @@ public class AnalisadorLexico {
     }
 
     static boolean possuiTabela(String l) {
-        if (tabelaDeSimbolos.contains(l)) {
+
+        if (tabelaDeSimbolos.containsKey(l)) {
             return true;
         }
         return false;
@@ -87,17 +88,15 @@ public class AnalisadorLexico {
             } else {
                 switch (estado) {
                     case 0: //inicial
-
-                        System.out.println(">>>>" + valorChar);
-                        /*if (quebraLinha(valorChar)){
-                            
-                         }*/
+                        /*if (c == 'A') {
+                            System.out.println(">>>>" + valorChar + "<<<<>>>>" + (char) valorChar + "<<<<<");
+                        }*/
+                        //System.out.println(">>>>" + valorChar + "<<<<>>>>" + (char) valorChar + "<<<<<");
                         if (c == ' ' || quebraLinha(valorChar)) {
                             vaiProximo();
-                        }
-                        if (Character.isDigit(valorChar)) {
+                        } else if (Character.isDigit(valorChar)) {
                             estado = 1; // inteiro ou real
-                            System.out.println("Leu " + c);
+                            // System.out.println("Leu " + c);
                             l = insereChar(l, c);
                             vaiProximo();
                         } else if (Character.isLetter(c)) {
@@ -119,17 +118,27 @@ public class AnalisadorLexico {
                             estado = 11; //igual
                             l = insereChar(l, c);
                             vaiProximo();
+                        } else if (c == '<') {
+                            estado = 10;
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        } else if (c == '>') {
+                            estado = 8;
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        } else {
+                            //System.out.println(">>>>"+valorChar);
+                            erro(c);
                         }
                         break;
                     case 1: // inteiro ou real
                         if (Character.isDigit(c)) {
                             l = insereChar(l, c);
-                            System.out.println("Leu " + c);
                             vaiProximo();
                         } else if (c == '.') {
+                            l = insereChar(l, c);
                             estado = 4; //real
                         } else {
-                            outroValor = c;
                             pegouOutro = true;
                             estado = 3;
                         }
@@ -148,7 +157,6 @@ public class AnalisadorLexico {
                         if (!possuiTabela(l)) {
                             tabelaDeSimbolos.put(l, ultimoID++);
                             System.out.println("Inserido = " + l);
-
                         }
                         if (!pegouOutro) { //resolve o primeiro e depois retorna o proximo char    
                             vaiProximo();
@@ -159,29 +167,69 @@ public class AnalisadorLexico {
                         break;
                     case 4:
 
+                        estado = 5;
+                        vaiProximo();
+
                         break;
                     case 5:
+                        //System.out.println("Entrou aqui! com +" + c);
+                        if (Character.isDigit(c)) {
+                            l = insereChar(l, c);
+                            estado = 6;
+                        } else {
+                            estado = 3;
+                        }
+                        vaiProximo();
                         break;
                     case 6:
+                        if (Character.isDigit(c)) {
+                            l = insereChar(l, c);
+                            estado = 7;
+                        } else {
+                            estado = 3;
+                        }
+                        vaiProximo();
                         break;
                     case 7:
+                        if (Character.isDigit(c)) {
+                            l = insereChar(l, c);
+                            estado = 8;
+                        } else {
+                            estado = 3;
+                        }
+                        vaiProximo();
                         break;
                     case 8:
+                        if (c == '=' || c == '<') {
+                            insereChar(l, c);
+                            estado = 3;
+                        } else {
+                            estado = 3;
+                            vaiProximo();
+                        }
                         break;
                     case 9:
                         if (c == '}') {
                             estado = 0;
                         }
+                        vaiProximo();
                         break;
                     case 10:
-                        break;
-                    case 11:
-                        if (c == '='){
+                        if (c == '=' || c == '>') {
                             insereChar(l, c);
                             estado = 3;
-                        }else{
-                            estado = 0;
-                            vaiProximo();
+                        } else {
+                            estado = 3;
+                            //vaiProximo();
+                        }
+                        break;
+                    case 11:
+                        if (c == '=') {
+                            insereChar(l, c);
+                            estado = 3;
+                        } else {
+                            estado = 3;
+                            //vaiProximo();
                         }
                         break;
                     case 12:
@@ -204,5 +252,10 @@ public class AnalisadorLexico {
         }
         br.close();
 
+    }
+
+    private void erro(char c) {
+        System.out.println("Não possui o caracter '" + c + "' na gramática!!!");
+        System.exit(-1);
     }
 }
