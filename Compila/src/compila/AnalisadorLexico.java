@@ -17,11 +17,16 @@ import java.util.Hashtable;
  */
 public class AnalisadorLexico {
 
-    static InputStreamReader br;
+    static InputStreamReader br = Main.br;
+    ;
     static int ultimoID = -1;
-    static int posicao;
+    //static int posicao;
     static int estado = 0;
     static Hashtable<String, Integer> tabelaDeSimbolos = Main.tabelaDeSimbolos;
+    static int valorChar = 0;//, valorCharAnterior;
+    static char c = ' ', outroValor = ' ';
+    static boolean fimArquivo = false, pegouProxValorChar = false, pegouOutro = false;
+    static String l = "";
 
     static String insereChar(String l, char c) {
         //l.setLexema();
@@ -31,10 +36,10 @@ public class AnalisadorLexico {
     static boolean eSimbolo(char c) {
 
         if (c == '+' || c == '-'
+                || c == ';'
                 || c == '(' || c == ')'
                 || c == '*' || c == '/'
-                || c == '<' || c == '>'
-                || c == '$') {
+                || c == '$' || c == ',') {
             return true;
         }
         return false;
@@ -45,6 +50,12 @@ public class AnalisadorLexico {
             return true;
         }
         return false;
+    }
+
+    static void vaiProximo() throws IOException {
+        valorChar = proximoValorChar();
+        c = (char) valorChar;
+        pegouProxValorChar = true;
     }
 
     static boolean quebraLinha(int valorChar) {
@@ -66,11 +77,6 @@ public class AnalisadorLexico {
                 ultimoID = valorDado;
             }
         }
-        br = Main.br;
-        int valorChar = 0;//, valorCharAnterior;
-        char c = ' ', outroValor = ' ';
-        boolean fimArquivo = false, pegouProxValorChar = false, pegouOutro = false;
-        String l = "";
         while (br.ready() && !fimArquivo) {
             if (!pegouProxValorChar) {
                 valorChar = br.read();
@@ -87,52 +93,39 @@ public class AnalisadorLexico {
                             
                          }*/
                         if (c == ' ' || quebraLinha(valorChar)) {
-                            valorChar = proximoValorChar();
-                            c = (char) valorChar;
-                            pegouProxValorChar = true;
+                            vaiProximo();
                         }
                         if (Character.isDigit(valorChar)) {
                             estado = 1; // inteiro ou real
                             System.out.println("Leu " + c);
                             l = insereChar(l, c);
-                            valorChar = proximoValorChar();
-                            c = (char) valorChar;
-                            pegouProxValorChar = true;
+                            vaiProximo();
                         } else if (Character.isLetter(c)) {
                             estado = 2; //identificadores e palavras reservadas
                             l = insereChar(l, c);
-                            valorChar = proximoValorChar();
-                            c = (char) valorChar;
-                            pegouProxValorChar = true;
+                            vaiProximo();
                         } else if (c == '.') {
                             estado = 4; //real
                             l = insereChar(l, c);
-                            valorChar = proximoValorChar();
-                            c = (char) valorChar;
-                            pegouProxValorChar = true;
+                            vaiProximo();
                         } else if (c == '{') {
                             estado = 9;
-                            valorChar = proximoValorChar();
-                            c = (char) valorChar;
-                            pegouProxValorChar = true;
+                            vaiProximo();
                         } else if (eSimbolo(c)) {
-                            estado = 3; // simbolos
-                            l = insereChar(l, c);
+                            vaiProximo();
+                            //estado = 3; // simbolos
+                            //l = insereChar(l, c);
                         } else if (c == '=') {
                             estado = 11; //igual
                             l = insereChar(l, c);
-                            valorChar = proximoValorChar();
-                            c = (char) valorChar;
-                            pegouProxValorChar = true;
+                            vaiProximo();
                         }
                         break;
                     case 1: // inteiro ou real
                         if (Character.isDigit(c)) {
                             l = insereChar(l, c);
                             System.out.println("Leu " + c);
-                            valorChar = proximoValorChar();
-                            c = (char) valorChar;
-                            pegouProxValorChar = true;
+                            vaiProximo();
                         } else if (c == '.') {
                             estado = 4; //real
                         } else {
@@ -144,8 +137,10 @@ public class AnalisadorLexico {
                     case 2:
                         if (Character.isDigit(c) || Character.isLetter(c)) {
                             l = insereChar(l, c);
+                            vaiProximo();
                         } else {
-                            // TODO Aqui é onde lê outro valor
+                            estado = 3;
+                            pegouOutro = true;
                         }
                         break;
                     case 3:
@@ -156,9 +151,8 @@ public class AnalisadorLexico {
 
                         }
                         if (!pegouOutro) { //resolve o primeiro e depois retorna o proximo char    
-                            valorChar = proximoValorChar();
-                            c = (char) valorChar;
-                            pegouProxValorChar = true;
+                            vaiProximo();
+                            pegouOutro = false;
                         }
                         l = "";
                         estado = 0;
@@ -182,6 +176,13 @@ public class AnalisadorLexico {
                     case 10:
                         break;
                     case 11:
+                        if (c == '='){
+                            insereChar(l, c);
+                            estado = 3;
+                        }else{
+                            estado = 0;
+                            vaiProximo();
+                        }
                         break;
                     case 12:
                         if (c == '=') {

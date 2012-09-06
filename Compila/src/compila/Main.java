@@ -92,48 +92,19 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
 
-        /*System.out.println("Rodando a Análise Léxica...");*/
-
-        //tabelaDeSimbolos = new TabelaDeSimbolos();
-        //tabelaDePalavrasReservadas = new TabelaDePalavrasReservadas();
-
+        
         // @TODO Ler arquivo de entrada através do args[0] verificar se existe e etc
         //if (verificarArquivoEntrada(args[0])) {
        
-        //String nomeArquivo="arquivoTeste.txt";
+        
         if ( verificarArquivoEntrada(nomeArquivoEntrada =JOptionPane.showInputDialog("Qual o nome do arquivo de teste encontrado na pasta do projeto?", nomeArquivoEntrada))) {
             
             
             carregarPalavrasReservadas();
             AnalisadorLexico al = new AnalisadorLexico();
-            imprimirTabelaDeSimbolos();
-            
-            
-            
-            /*
-            System.out.println("");
-            System.out.println("Imprimindo todos Agora!!!!!!!");
-            System.out.println("");
-            
-            for (Lexema i :  tabelaDeSimbolos.keySet()) {
-                System.out.println(" L : "+i.getLexema()+" ID : "+tabelaDeSimbolos.get(i).getID());
-            }*/
-
-/*
-            AnaliseLexica analiseLexica = new AnaliseLexica();
-
-            br = new BufferedReader(new FileReader(arquivoEntrada));
-            String linha;
-            System.out.println("Verificando se o arquivo está léxicamente correto...");
-            for (int numeroLinha = 1; br.ready(); numeroLinha++) {
-                linha = br.readLine();
-                analiseLexica.verificaString((linha+"\n").toCharArray(), numeroLinha);
-            }
             br.close();
-            // @TODO Criar while para fim de arquivo
-            System.out.println("O arquivo está léxicamente correto!");
-            imprimirTabelaDeSimbolos();*/
-
+            imprimirTabelaDeSimbolos();
+        
         } else {
             // @TODO O arquivo encontrado não existe
             //System.out.format("O arquivo %s não existe", args[0]);
