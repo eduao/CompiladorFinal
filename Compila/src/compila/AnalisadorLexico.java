@@ -33,7 +33,8 @@ public class AnalisadorLexico {
         if (c == '+' || c == '-'
                 || c == '(' || c == ')'
                 || c == '*' || c == '/'
-                || c == '<' || c == '>') {
+                || c == '<' || c == '>'
+                || c == '$') {
             return true;
         }
         return false;
@@ -59,30 +60,32 @@ public class AnalisadorLexico {
                 fimArquivo = true;
             } else {
                 switch (estado) {
-                    case 0:
-
+                    case 0: //inicial
                         if (Character.isDigit(valorChar)) {
-                            estado = 1;
+                            estado = 1; // inteiro ou real
                             l = insereChar(l, c);
                         } else if (Character.isLetter(c)) {
-                            estado = 2;
+                            estado = 2; //identificadores e palavras reservadas
                             l = insereChar(l, c);
                         } else if (c == '.') {
-                            estado = 4;
+                            estado = 4; //real
                             l = insereChar(l, c);
                         } else if (c == '{') {
-                            estado = 9;
+                            estado = 9; // comentario não vai inserir no final como token
                             l = insereChar(l, c);
                         } else if (eSimbolo(c)) {
-                            estado = 3;
+                            estado = 3; // simbolos
+                            l = insereChar(l, c);
+                        } else if(c == '='){
+                            estado = 12; //igual
                             l = insereChar(l, c);
                         }
                         break;
-                    case 1:
+                    case 1: // inteiro ou real
                         if (Character.isDigit(c)) {
                             l.setLexema(l.getLexema().concat("" + c));
                         } else if (c == '.') {
-                            estado = 4;
+                            estado = 4; //real
                         } else {
                             valorCharAnterior = valorChar;
                             estado = 3;
@@ -94,6 +97,7 @@ public class AnalisadorLexico {
 
                         break;
                     case 4:
+                            
                         break;
                     case 5:
                         break;
@@ -110,6 +114,12 @@ public class AnalisadorLexico {
                     case 11:
                         break;
                     case 12:
+                        if (c == '='){
+                            estado = 13;
+                            l = insereChar(l, c);
+                        }else if (c != '='){
+                            estado = 3;
+                        }
                         break;
                     case 13:
                         break;
