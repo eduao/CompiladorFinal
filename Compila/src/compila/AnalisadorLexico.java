@@ -23,12 +23,28 @@ public class AnalisadorLexico {
     static int estado = 0;
     static Hashtable<Lexema, ID> tabelaDeSimbolos = Main.tabelaDeSimbolos;
 
+    static Lexema insereChar(Lexema l, char c) {
+        l.setLexema(l.getLexema().concat("" + c));
+        return l;
+    }
+
+    static boolean eSimbolo(char c) {
+
+        if (c == '+' || c == '-'
+                || c == '(' || c == ')'
+                || c == '*' || c == '/'
+                || c == '<' || c == '>') {
+            return true;
+        }
+        return false;
+    }
+
     public AnalisadorLexico() throws IOException {
 
-        for (ID a : tabelaDeSimbolos.values()){
+        for (ID a : tabelaDeSimbolos.values()) {
             int valorDado;
-            if ((valorDado = a.getID()) > ultimoID){
-                ultimoID= valorDado;
+            if ((valorDado = a.getID()) > ultimoID) {
+                ultimoID = valorDado;
             }
         }
         br = Main.br;
@@ -44,26 +60,38 @@ public class AnalisadorLexico {
             } else {
                 switch (estado) {
                     case 0:
-                        
+
                         if (Character.isDigit(valorChar)) {
                             estado = 1;
-                            l.setLexema(l.getLexema().concat("" + c));
+                            l = insereChar(l, c);
+                        } else if (Character.isLetter(c)) {
+                            estado = 2;
+                            l = insereChar(l, c);
+                        } else if (c == '.') {
+                            estado = 4;
+                            l = insereChar(l, c);
+                        } else if (c == '{') {
+                            estado = 9;
+                            l = insereChar(l, c);
+                        } else if (eSimbolo(c)) {
+                            estado = 3;
+                            l = insereChar(l, c);
                         }
                         break;
                     case 1:
-                        if (Character.isDigit(c)){
-                            l.setLexema(l.getLexema().concat(""+c));
-                        }else if (c == '.'){
+                        if (Character.isDigit(c)) {
+                            l.setLexema(l.getLexema().concat("" + c));
+                        } else if (c == '.') {
                             estado = 4;
-                        }else{
+                        } else {
                             valorCharAnterior = valorChar;
-                            estado = 3;                            
+                            estado = 3;
                         }
                         break;
                     case 2:
                         break;
                     case 3:
-                        
+
                         break;
                     case 4:
                         break;
