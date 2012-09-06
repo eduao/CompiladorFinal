@@ -156,7 +156,7 @@ public class AnalisadorLexico {
 
                         if (!possuiTabela(l)) {
                             tabelaDeSimbolos.put(l, ultimoID++);
-                            System.out.println("Inserido = " + l);
+                          //  System.out.println("Inserido = " + l);
                         }
                         if (!pegouOutro) { //resolve o primeiro e depois retorna o proximo char    
                             vaiProximo();
