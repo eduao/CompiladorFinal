@@ -7,8 +7,11 @@ package compila;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.CharBuffer;
 import java.util.Hashtable;
 import java.util.Iterator;
@@ -23,7 +26,9 @@ public class Main {
     static Hashtable<Lexema,ID> tabelaDeSimbolos = new Hashtable<Lexema, ID>();
     //static TabelaDePalavrasReservadas tabelaDePalavrasReservadas;
     static File arquivoEntrada;
-    static BufferedReader br;
+    static String nomeArquivoEntrada = "teste.txt";
+    static FileInputStream fis;
+    static InputStreamReader br;
     
     
     
@@ -69,10 +74,13 @@ public class Main {
     }
             
 
-    private static boolean verificarArquivoEntrada(String string) {
+    private static boolean verificarArquivoEntrada(String string) throws FileNotFoundException {
 
-        arquivoEntrada = new File(string);
-        if (arquivoEntrada.exists()) {
+        
+        File arquivo = new File(string);
+        if (arquivo.exists()) {
+            fis = new FileInputStream(arquivo);
+            br = new InputStreamReader(fis);
             return true;
         } else {
             return false;
@@ -92,11 +100,11 @@ public class Main {
         // @TODO Ler arquivo de entrada através do args[0] verificar se existe e etc
         //if (verificarArquivoEntrada(args[0])) {
        
-        
-        if (verificarArquivoEntrada(JOptionPane.showInputDialog("Qual o nome do arquivo de teste encontrado na pasta do projeto?", "arquivoTeste.txt"))) {
+        //String nomeArquivo="arquivoTeste.txt";
+        if ( verificarArquivoEntrada(nomeArquivoEntrada =JOptionPane.showInputDialog("Qual o nome do arquivo de teste encontrado na pasta do projeto?", nomeArquivoEntrada))) {
+            
             
             carregarPalavrasReservadas();
-            br = new BufferedReader(new FileReader(arquivoEntrada));
             AnalisadorLexico al = new AnalisadorLexico();
             
             

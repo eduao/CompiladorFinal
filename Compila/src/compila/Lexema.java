@@ -9,7 +9,7 @@ package compila;
  * @author Eduardo
  */
 public class Lexema {
-    private String lexema; // constante = "3", palavra reservada = "IF", etc...
+    private String lexema = ""; // constante = "3", palavra reservada = "IF", etc...
     
     public Lexema(String lexema) {
         this.lexema = lexema;

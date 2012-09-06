@@ -6,6 +6,7 @@ package compila;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.CharBuffer;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -16,38 +17,83 @@ import java.util.Hashtable;
  */
 public class AnalisadorLexico {
 
-    
-    static BufferedReader br;// = Main.br;
-    static CharBuffer cb;// = CharBuffer.wrap(br.toString());
-    static Hashtable<Lexema,ID> tabelaDeSimbolos = Main.tabelaDeSimbolos;
-    
-    
-    
-    static char proximoChar(int posicao){
-        return cb.get(posicao);
-    }
-    
-    
+    static InputStreamReader br;
+    static int ultimoID = -1;
+    static int posicao;
+    static int estado = 0;
+    static Hashtable<Lexema, ID> tabelaDeSimbolos = Main.tabelaDeSimbolos;
+
     public AnalisadorLexico() throws IOException {
-        
-               
-        br = Main.br;
-        cb = CharBuffer.wrap(br.readLine());
-        
-        for (Lexema l : tabelaDeSimbolos.keySet()){
-            System.out.println("Lexema "+l.getLexema()+" - ID "+tabelaDeSimbolos.get(l).getID());
+
+        for (ID a : tabelaDeSimbolos.values()){
+            int valorDado;
+            if ((valorDado = a.getID()) > ultimoID){
+                ultimoID= valorDado;
+            }
         }
-        
-        //br.readLine();
-        
-        //System.out.println("BR = "+br.readLine());
-        
-        
-        System.out.println("O char retornado é ("+proximoChar(4)+")");
-        
+        br = Main.br;
+        int valorChar, valorCharAnterior;
+        char c;
+        boolean fimArquivo = false;
+        Lexema l = new Lexema();
+        while (br.ready() && !fimArquivo) {
+            valorChar = br.read();
+            c = (char) valorChar;
+            if (valorChar == -1) {
+                fimArquivo = true;
+            } else {
+                switch (estado) {
+                    case 0:
+                        
+                        if (Character.isDigit(valorChar)) {
+                            estado = 1;
+                            l.setLexema(l.getLexema().concat("" + c));
+                        }
+                        break;
+                    case 1:
+                        if (Character.isDigit(c)){
+                            l.setLexema(l.getLexema().concat(""+c));
+                        }else if (c == '.'){
+                            estado = 4;
+                        }else{
+                            valorCharAnterior = valorChar;
+                            estado = 3;                            
+                        }
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        
+                        break;
+                    case 4:
+                        break;
+                    case 5:
+                        break;
+                    case 6:
+                        break;
+                    case 7:
+                        break;
+                    case 8:
+                        break;
+                    case 9:
+                        break;
+                    case 10:
+                        break;
+                    case 11:
+                        break;
+                    case 12:
+                        break;
+                    case 13:
+                        break;
+                    case 14:
+                        break;
+                    case 15:
+                        break;
+                }
+            }
+
+        }
+        br.close();
+
     }
-    
-    
-    
-    
 }
