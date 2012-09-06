@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
  */
 public class Main {
 
-    static Hashtable<Lexema,ID> tabelaDeSimbolos = new Hashtable<Lexema, ID>();
+    static Hashtable<String,Integer> tabelaDeSimbolos = new Hashtable<String, Integer>();
     //static TabelaDePalavrasReservadas tabelaDePalavrasReservadas;
     static File arquivoEntrada;
     static String nomeArquivoEntrada = "teste.txt";
@@ -34,42 +34,42 @@ public class Main {
     
     static void carregarPalavrasReservadas() {
         System.out.println("Abastecendo a tabela de palavras reservadas...");
-        tabelaDeSimbolos.put(new Lexema("DPonto"), new ID(1));
-        tabelaDeSimbolos.put(new Lexema("DFace"), new ID(2));
-        tabelaDeSimbolos.put(new Lexema("DObjeto"), new ID(3));
-        tabelaDeSimbolos.put(new Lexema("DCor"), new ID(4));
-        tabelaDeSimbolos.put(new Lexema("DLuz"), new ID(5));
-        tabelaDeSimbolos.put(new Lexema("DVar"), new ID(6));
-        tabelaDeSimbolos.put(new Lexema("DConst"), new ID(7));
-        tabelaDeSimbolos.put(new Lexema("inteiro"), new ID(8));
-        tabelaDeSimbolos.put(new Lexema("real"), new ID(9));
-        tabelaDeSimbolos.put(new Lexema("Escala"), new ID(10));
-        tabelaDeSimbolos.put(new Lexema("Pausa"), new ID(11));
-        tabelaDeSimbolos.put(new Lexema("Rottrans"), new ID(12));
-        tabelaDeSimbolos.put(new Lexema("Enquanto"), new ID(13));
-        tabelaDeSimbolos.put(new Lexema("faca"), new ID(14));
-        tabelaDeSimbolos.put(new Lexema("Se"), new ID(15));
-        tabelaDeSimbolos.put(new Lexema("entao"), new ID(16));
-        tabelaDeSimbolos.put(new Lexema("senao"), new ID(17));
-        tabelaDeSimbolos.put(new Lexema("E"), new ID(18));
-        tabelaDeSimbolos.put(new Lexema("OU"), new ID(19));
-        tabelaDeSimbolos.put(new Lexema("NAO"), new ID(20));
-        tabelaDeSimbolos.put(new Lexema("=="), new ID(21));
-        tabelaDeSimbolos.put(new Lexema("="), new ID(22));
-        tabelaDeSimbolos.put(new Lexema("("), new ID(23));
-        tabelaDeSimbolos.put(new Lexema(")"), new ID(24));
-        tabelaDeSimbolos.put(new Lexema(","), new ID(25));
-        tabelaDeSimbolos.put(new Lexema("+"), new ID(26));
-        tabelaDeSimbolos.put(new Lexema("-"), new ID(27));
-        tabelaDeSimbolos.put(new Lexema("*"), new ID(28));
-        tabelaDeSimbolos.put(new Lexema("<"), new ID(29));
-        tabelaDeSimbolos.put(new Lexema(">"), new ID(30));
-        tabelaDeSimbolos.put(new Lexema("<>"), new ID(31));
-        tabelaDeSimbolos.put(new Lexema(">="), new ID(32));
-        tabelaDeSimbolos.put(new Lexema("<="), new ID(33));
-        tabelaDeSimbolos.put(new Lexema("/"), new ID(34));
-        tabelaDeSimbolos.put(new Lexema("inicio"), new ID(35));
-        tabelaDeSimbolos.put(new Lexema("fim"), new ID(36));
+        tabelaDeSimbolos.put("DPonto", 1);
+        tabelaDeSimbolos.put("DFace", 2);
+        tabelaDeSimbolos.put("DObjeto", 3);
+        tabelaDeSimbolos.put("DCor", 4);
+        tabelaDeSimbolos.put("DLuz", 5);
+        tabelaDeSimbolos.put("DVar", 6);
+        tabelaDeSimbolos.put("DConst", 7);
+        tabelaDeSimbolos.put("inteiro", 8);
+        tabelaDeSimbolos.put("real", 9);
+        tabelaDeSimbolos.put("Escala", 10);
+        tabelaDeSimbolos.put("Pausa", 11);
+        tabelaDeSimbolos.put("Rottrans", 12);
+        tabelaDeSimbolos.put("Enquanto", 13);
+        tabelaDeSimbolos.put("faca", 14);
+        tabelaDeSimbolos.put("Se", 15);
+        tabelaDeSimbolos.put("entao", 16);
+        tabelaDeSimbolos.put("senao", 17);
+        tabelaDeSimbolos.put("E", 18);
+        tabelaDeSimbolos.put("OU", 19);
+        tabelaDeSimbolos.put("NAO", 20);
+        tabelaDeSimbolos.put("==", 21);
+        tabelaDeSimbolos.put("=", 22);
+        tabelaDeSimbolos.put("(", 23);
+        tabelaDeSimbolos.put(")", 24);
+        tabelaDeSimbolos.put(",", 25);
+        tabelaDeSimbolos.put("+", 26);
+        tabelaDeSimbolos.put("-", 27);
+        tabelaDeSimbolos.put("*", 28);
+        tabelaDeSimbolos.put("<", 29);
+        tabelaDeSimbolos.put(">", 30);
+        tabelaDeSimbolos.put("<>", 31);
+        tabelaDeSimbolos.put(">=", 32);
+        tabelaDeSimbolos.put("<=", 33);
+        tabelaDeSimbolos.put("/", 34);
+        tabelaDeSimbolos.put("inicio", 35);
+        tabelaDeSimbolos.put("fim", 36);
         System.out.println("Palavras Reservadas carregadas...");
     }
             
@@ -106,6 +106,7 @@ public class Main {
             
             carregarPalavrasReservadas();
             AnalisadorLexico al = new AnalisadorLexico();
+            imprimirTabelaDeSimbolos();
             
             
             
@@ -145,8 +146,8 @@ public class Main {
     public static void imprimirTabelaDeSimbolos (){
         System.out.println("======================================================");
         System.out.println("Imprimindo a tabela de simbolos...");
-        for (Lexema lexema : tabelaDeSimbolos.keySet()) {
-            System.out.println("["+ lexema.getLexema() + ", " + tabelaDeSimbolos.get(lexema).getID() + "]");
+        for (String lexema : tabelaDeSimbolos.keySet()) {
+            System.out.println("["+ lexema + ", " + tabelaDeSimbolos.get(lexema) + "]");
         }
         System.out.println("======================================================");
     }
