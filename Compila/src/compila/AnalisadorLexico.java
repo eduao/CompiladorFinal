@@ -22,11 +22,13 @@ public class AnalisadorLexico {
     static int ultimoID = -1;
     //static int posicao;
     static int estado = 0;
-    static Hashtable<String, Integer> tabelaDeSimbolos = Main.tabelaDeSimbolos;
+    static TabelaDeSimbolos tabelaDeSimbolos = Main.tabelaDeSimbolos;
     static int valorChar = 0;//, valorCharAnterior;
     static char c = ' ', outroValor = ' ';
     static boolean fimArquivo = false, pegouProxValorChar = false, pegouOutro = false;
     static String l = "";
+    static int linha = 1;
+    static int coluna = 1;
 
     static String insereChar(String l, char c) {
         //l.setLexema();
@@ -61,12 +63,15 @@ public class AnalisadorLexico {
 
     static boolean quebraLinha(int valorChar) {
         if (valorChar == 13 || valorChar == 10) {
+            linha++;
+            coluna = 1;
             return true;
         }
         return false;
     }
 
     static int proximoValorChar() throws IOException {
+        coluna++;
         return br.read();
     }
 
@@ -89,8 +94,8 @@ public class AnalisadorLexico {
                 switch (estado) {
                     case 0: //inicial
                         /*if (c == 'A') {
-                            System.out.println(">>>>" + valorChar + "<<<<>>>>" + (char) valorChar + "<<<<<");
-                        }*/
+                         System.out.println(">>>>" + valorChar + "<<<<>>>>" + (char) valorChar + "<<<<<");
+                         }*/
                         //System.out.println(">>>>" + valorChar + "<<<<>>>>" + (char) valorChar + "<<<<<");
                         if (c == ' ' || quebraLinha(valorChar)) {
                             vaiProximo();
@@ -128,7 +133,7 @@ public class AnalisadorLexico {
                             vaiProximo();
                         } else {
                             //System.out.println(">>>>"+valorChar);
-                            erro(c);
+                            erro("Caractere inválido. Não é possível começar um token com o mesmo.");
                         }
                         break;
                     case 1: // inteiro ou real
@@ -156,7 +161,7 @@ public class AnalisadorLexico {
 
                         if (!possuiTabela(l)) {
                             tabelaDeSimbolos.put(l, ultimoID++);
-                          //  System.out.println("Inserido = " + l);
+                            //  System.out.println("Inserido = " + l);
                         }
                         if (!pegouOutro) { //resolve o primeiro e depois retorna o proximo char    
                             vaiProximo();
@@ -176,6 +181,8 @@ public class AnalisadorLexico {
                         if (Character.isDigit(c)) {
                             l = insereChar(l, c);
                             estado = 6;
+                        } else if (c == '.') {
+                            erro("Um número não pode conter duas partes fracionárias!");
                         } else {
                             estado = 3;
                         }
@@ -185,6 +192,8 @@ public class AnalisadorLexico {
                         if (Character.isDigit(c)) {
                             l = insereChar(l, c);
                             estado = 7;
+                        } else if (c == '.') {
+                            erro("Um número não pode conter duas partes fracionárias!");
                         } else {
                             estado = 3;
                         }
@@ -194,6 +203,8 @@ public class AnalisadorLexico {
                         if (Character.isDigit(c)) {
                             l = insereChar(l, c);
                             estado = 8;
+                        } else if (c == '.') {
+                            erro("Um número não pode conter duas partes fracionárias!");
                         } else {
                             estado = 3;
                         }
@@ -254,8 +265,8 @@ public class AnalisadorLexico {
 
     }
 
-    private void erro(char c) {
-        System.out.println("Não possui o caracter '" + c + "' na gramática!!!");
+    private void erro(String mensagemDeErro) {
+        System.out.println("[lexico][linha = " + linha + "][coluna = " + coluna + "]" + mensagemDeErro);
         System.exit(-1);
     }
 }

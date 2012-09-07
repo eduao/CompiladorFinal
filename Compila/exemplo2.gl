@@ -1,7 +1,7 @@
 {Exemplo de programa-fonte da linguagem "GL" }
 
 DPonto
-      P1=(-10,10,10)
+      P1=(-10,10..0,10)
       P2=(-10,-10,10)
       P3=(10,-10,10)
       P4=(10,10,10)

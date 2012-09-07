@@ -5,16 +5,11 @@
  */
 package compila;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.CharBuffer;
-import java.util.Hashtable;
-import java.util.Iterator;
 import javax.swing.JOptionPane;
 
 /**
@@ -23,7 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class Main {
 
-    static Hashtable<String,Integer> tabelaDeSimbolos = new Hashtable<String, Integer>();
+    static TabelaDeSimbolos tabelaDeSimbolos = new TabelaDeSimbolos();
     //static TabelaDePalavrasReservadas tabelaDePalavrasReservadas;
     static File arquivoEntrada;
     static String nomeArquivoEntrada = "exemplo2.gl";
@@ -103,7 +98,7 @@ public class Main {
             carregarPalavrasReservadas();
             AnalisadorLexico al = new AnalisadorLexico();
             br.close();
-            //imprimirTabelaDeSimbolos();
+            System.out.println(tabelaDeSimbolos);
         
         } else {
             // @TODO O arquivo encontrado não existe
@@ -114,12 +109,5 @@ public class Main {
     }
     
     
-    public static void imprimirTabelaDeSimbolos (){
-        System.out.println("======================================================");
-        System.out.println("Imprimindo a tabela de simbolos...");
-        for (String lexema : tabelaDeSimbolos.keySet()) {
-            System.out.println("["+ lexema + ", " + tabelaDeSimbolos.get(lexema) + "]");
-        }
-        System.out.println("======================================================");
-    }
+    
 }
