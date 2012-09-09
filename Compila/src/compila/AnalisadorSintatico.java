@@ -11,6 +11,13 @@ package compila;
 public class AnalisadorSintatico {
     
     public void casaToken(String token) {
+        /*
+         * Procedimento casaToken (Token tokenEsperado)
+         *      Se tokenAtual != tokenEsperado
+         *          Entao erro
+         *      Senao
+         *          Chamar AnalisadorLexico
+         */
     }
     
     public void erroSintatico() {
