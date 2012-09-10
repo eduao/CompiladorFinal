@@ -29,7 +29,7 @@ public class TabelaDeSimbolos extends Hashtable<String, Linha> {
         str = "======================================================";
         str = str + "\nImprimindo a tabela de simbolos...";
         for (String lexema : hashTableOrdenada.keySet()) {
-            str = str + "\n[" + padronizarTam(get(lexema).toString(), 5) + ", " + padronizarTam(lexema, 20) + "]";
+            str = str + "\n[" + padronizarTam(lexema, 5) + ", " + padronizarTam(get(lexema).getToken(), 20) + "]";
         }
         str = str + "\n======================================================";
         return str;
@@ -42,6 +42,16 @@ public class TabelaDeSimbolos extends Hashtable<String, Linha> {
         }
         return retorno;
     }
+    
+     public String padronizarTam(Integer str, int tam) {
+        String retorno = str+"";
+        while (retorno.length() < tam) {
+            retorno = retorno + " ";
+        }
+        return retorno;
+    }
+    
+    
 
     
     
@@ -54,17 +64,24 @@ public class TabelaDeSimbolos extends Hashtable<String, Linha> {
         }
 
         // Note: this comparator imposes orderings that are inconsistent with equals.    
-        public int compare(Linha a, Linha b) {
+       /* public int compare(Linha a, Linha b) {
             if (a.getToken() < b.getToken()) {
                 return -1;
             } else {
                 return 1;
             } // returning 0 would merge keys
-        }
+        }*/
 
         @Override
         public int compare(String o1, String o2) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            if (base.get(o1).getToken() < base.get(o2).getToken()) {
+                return -1;
+            } else {
+                return 1;
+            } // returning 0 would merge keys
+            /*throw new UnsupportedOperationException("Not supported yet.");*/
         }
+
+       
     }
 }
