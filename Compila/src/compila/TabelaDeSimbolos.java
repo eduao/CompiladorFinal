@@ -13,16 +13,17 @@ import java.util.TreeMap;
  *
  * @author Augusto FADC
  */
-public class TabelaDeSimbolos extends Hashtable<String, Integer> {
+public class TabelaDeSimbolos extends Hashtable<String, Linha> {
 
     public TabelaDeSimbolos() {
         //carregarPalavrasReservadas();
     }
+    
 
     @Override
     public synchronized String toString() {
         ValueComparator valueComparator =  new ValueComparator(this);
-        TreeMap<String, Integer> hashTableOrdenada = new TreeMap<String, Integer>(valueComparator);
+        TreeMap<String, Linha> hashTableOrdenada = new TreeMap<String, Linha>(valueComparator);
         hashTableOrdenada.putAll(this);
         String str;
         str = "======================================================";
@@ -42,21 +43,28 @@ public class TabelaDeSimbolos extends Hashtable<String, Integer> {
         return retorno;
     }
 
+    
+    
     class ValueComparator implements Comparator<String> {
 
-        Map<String, Integer> base;
-
-        public ValueComparator(Map<String, Integer> base) {
-            this.base = base;
+        Map<String, Linha> base;
+        
+        public ValueComparator(Map<String, Linha> base) {
+            this.base = base;            
         }
 
         // Note: this comparator imposes orderings that are inconsistent with equals.    
-        public int compare(String a, String b) {
-            if (base.get(a) < base.get(b)) {
+        public int compare(Linha a, Linha b) {
+            if (a.getToken() < b.getToken()) {
                 return -1;
             } else {
                 return 1;
             } // returning 0 would merge keys
+        }
+
+        @Override
+        public int compare(String o1, String o2) {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 }

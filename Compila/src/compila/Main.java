@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Map.Entry;
 import javax.swing.JOptionPane;
 
 /**
@@ -29,42 +30,42 @@ public class Main {
     
     static void carregarPalavrasReservadas() {
         System.out.println("Abastecendo a tabela de palavras reservadas...");
-        tabelaDeSimbolos.put("DPonto", 1);
-        tabelaDeSimbolos.put("DFace", 2);
-        tabelaDeSimbolos.put("DObjeto", 3);
-        tabelaDeSimbolos.put("DCor", 4);
-        tabelaDeSimbolos.put("DLuz", 5);
-        tabelaDeSimbolos.put("DVar", 6);
-        tabelaDeSimbolos.put("DConst", 7);
-        tabelaDeSimbolos.put("inteiro", 8);
-        tabelaDeSimbolos.put("real", 9);
-        tabelaDeSimbolos.put("Escala", 10);
-        tabelaDeSimbolos.put("Pausa", 11);
-        tabelaDeSimbolos.put("Rottrans", 12);
-        tabelaDeSimbolos.put("Enquanto", 13);
-        tabelaDeSimbolos.put("faca", 14);
-        tabelaDeSimbolos.put("Se", 15);
-        tabelaDeSimbolos.put("entao", 16);
-        tabelaDeSimbolos.put("senao", 17);
-        tabelaDeSimbolos.put("E", 18);
-        tabelaDeSimbolos.put("OU", 19);
-        tabelaDeSimbolos.put("NAO", 20);
-        tabelaDeSimbolos.put("==", 21);
-        tabelaDeSimbolos.put("=", 22);
-        tabelaDeSimbolos.put("(", 23);
-        tabelaDeSimbolos.put(")", 24);
-        tabelaDeSimbolos.put(",", 25);
-        tabelaDeSimbolos.put("+", 26);
-        tabelaDeSimbolos.put("-", 27);
-        tabelaDeSimbolos.put("*", 28);
-        tabelaDeSimbolos.put("<", 29);
-        tabelaDeSimbolos.put(">", 30);
-        tabelaDeSimbolos.put("<>", 31);
-        tabelaDeSimbolos.put(">=", 32);
-        tabelaDeSimbolos.put("<=", 33);
-        tabelaDeSimbolos.put("/", 34);
-        tabelaDeSimbolos.put("inicio", 35);
-        tabelaDeSimbolos.put("fim", 36);
+        tabelaDeSimbolos.put("DPonto", new Linha("DPonto", 1));
+        tabelaDeSimbolos.put("DFace", new Linha("DFace", 2));
+        tabelaDeSimbolos.put("DObjeto", new Linha("DObjeto", 3));
+        tabelaDeSimbolos.put("DCor", new Linha("DCor", 4));
+        tabelaDeSimbolos.put("DLuz", new Linha("DLuz", 5));
+        tabelaDeSimbolos.put("DVar", new Linha("DVar", 6));
+        tabelaDeSimbolos.put("DConst", new Linha("DConst", 7));
+        tabelaDeSimbolos.put("inteiro", new Linha("inteiro", 8));
+        tabelaDeSimbolos.put("real", new Linha("real", 9));
+        tabelaDeSimbolos.put("Escala", new Linha("Escala", 10));
+        tabelaDeSimbolos.put("Pausa", new Linha("Pausa",11 ));
+        tabelaDeSimbolos.put("Rottrans", new Linha("Rottrans", 12));
+        tabelaDeSimbolos.put("Enquanto", new Linha("Enquanto", 13));
+        tabelaDeSimbolos.put("faca", new Linha("faca", 14));
+        tabelaDeSimbolos.put("Se", new Linha("Se", 15));
+        tabelaDeSimbolos.put("entao", new Linha("entao", 16));
+        tabelaDeSimbolos.put("senao", new Linha("senao", 17));
+        tabelaDeSimbolos.put("E", new Linha("E", 18));
+        tabelaDeSimbolos.put("OU", new Linha("OU", 19));
+        tabelaDeSimbolos.put("NAO", new Linha("NAO", 20));
+        tabelaDeSimbolos.put("==", new Linha("==", 21));
+        tabelaDeSimbolos.put("=", new Linha("=", 22));
+        tabelaDeSimbolos.put("(", new Linha("(", 23));
+        tabelaDeSimbolos.put(")", new Linha(")", 24));
+        tabelaDeSimbolos.put(",", new Linha(",", 25));
+        tabelaDeSimbolos.put("+", new Linha("+", 26));
+        tabelaDeSimbolos.put("-", new Linha("-", 27));
+        tabelaDeSimbolos.put("*", new Linha("*", 28));
+        tabelaDeSimbolos.put("<", new Linha("<", 29));
+        tabelaDeSimbolos.put(">", new Linha(">", 30));
+        tabelaDeSimbolos.put("<>", new Linha("<>",31));
+        tabelaDeSimbolos.put(">=", new Linha(">=", 32));
+        tabelaDeSimbolos.put("<=", new Linha("<=", 33));
+        tabelaDeSimbolos.put("/", new Linha("/", 34));
+        tabelaDeSimbolos.put("inicio", new Linha("inicio", 35));
+        tabelaDeSimbolos.put("fim", new Linha("fim", 36));
         System.out.println("Palavras Reservadas carregadas...");
     }
             
@@ -97,6 +98,9 @@ public class Main {
             
             carregarPalavrasReservadas();
             AnalisadorLexico al = new AnalisadorLexico();
+           
+            
+            
             br.close();
             System.out.println(tabelaDeSimbolos);
         

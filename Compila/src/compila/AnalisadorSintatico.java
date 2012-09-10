@@ -23,6 +23,8 @@ public class AnalisadorSintatico {
     public void erroSintatico() {
         System.out.println("ERRO SINTATICO =/");
     }
+    
+    StringBuffer sb;
     String token;
     String ID, CONST, QUEBRA_DE_LINHA;//AINDA NAO SEI O QUE FAZER
 

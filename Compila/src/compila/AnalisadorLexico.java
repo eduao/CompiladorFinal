@@ -25,9 +25,9 @@ public class AnalisadorLexico {
     static TabelaDeSimbolos tabelaDeSimbolos = Main.tabelaDeSimbolos;
     static int valorChar = 0;//, valorCharAnterior;
     static char c = ' ', outroValor = ' ';
-    static boolean fimArquivo = false, pegouProxValorChar = false, pegouOutro = false;
+    static boolean fimArquivo = false, pegouProxValorChar = false, pegouOutro = false, veioDeConstante = false;
     static String l = "";
-    static int linha = 1;
+    static int linha = 0;
     static int coluna = 1;
 
     static String insereChar(String l, char c) {
@@ -48,7 +48,7 @@ public class AnalisadorLexico {
     }
 
     static boolean possuiTabela(String l) {
-
+        
         if (tabelaDeSimbolos.containsKey(l)) {
             return true;
         }
@@ -77,9 +77,9 @@ public class AnalisadorLexico {
 
     public AnalisadorLexico() throws IOException {
 
-        for (Integer a : tabelaDeSimbolos.values()) {
+        for (Linha a : tabelaDeSimbolos.values()) {
             int valorDado;
-            if ((valorDado = a) > ultimoID) {
+            if ((valorDado = a.getToken()) > ultimoID) {
                 ultimoID = valorDado;
             }
         }
@@ -137,6 +137,8 @@ public class AnalisadorLexico {
                         }
                         break;
                     case 1: // inteiro ou real
+                        veioDeConstante = true;
+                                
                         if (Character.isDigit(c)) {
                             l = insereChar(l, c);
                             vaiProximo();
@@ -160,13 +162,18 @@ public class AnalisadorLexico {
                     case 3:
 
                         if (!possuiTabela(l)) {
-                            tabelaDeSimbolos.put(l, ultimoID++);
-                            //  System.out.println("Inserido = " + l);
+                            
+                            if (!veioDeConstante){
+                            
+                                tabelaDeSimbolos.put(l, new Linha(l,ultimoID++));
+                            }
+                            
                         }
                         if (!pegouOutro) { //resolve o primeiro e depois retorna o proximo char    
                             vaiProximo();
                             pegouOutro = false;
                         }
+                        veioDeConstante = false;
                         l = "";
                         estado = 0;
                         break;
@@ -266,7 +273,13 @@ public class AnalisadorLexico {
     }
 
     private void erro(String mensagemDeErro) {
-        System.out.println("[lexico][linha = " + linha + "][coluna = " + coluna + "]" + mensagemDeErro);
+        //if (linha % 2 == 1){
+        //    System.out.println("[lexico][linha = " + ((linha/2)+1) + "][coluna = " + coluna + "]" + mensagemDeErro);
+       // }else{
+            System.out.println("[lexico][linha = " + ((linha/2)+2) + "][coluna = " + coluna + "]" + mensagemDeErro);
+      //  }
         System.exit(-1);
     }
+    
+   
 }
