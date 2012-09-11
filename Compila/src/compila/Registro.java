@@ -8,7 +8,7 @@ package compila;
  *
  * @author 365564
  */
-public class Linha {
+public class Registro {
 
     public String getLexema() {
         return Lexema;
@@ -18,18 +18,18 @@ public class Linha {
         this.Lexema = Lexema;
     }
 
-    public int getToken() {
+    public byte getToken() {
         return Token;
     }
 
-    public void setToken(int Token) {
+    public void setToken(byte Token) {
         this.Token = Token;
     }
     
     private String Lexema;
-    private int Token;
+    private byte Token;
 
-    public Linha(String Lexema,int Token) {
+    public Registro(String Lexema,byte Token) {
         this.Lexema = Lexema;
         this.Token = Token;
     }

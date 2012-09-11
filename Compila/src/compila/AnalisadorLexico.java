@@ -18,11 +18,10 @@ import java.util.Hashtable;
 public class AnalisadorLexico {
 
     static InputStreamReader br = Main.br;
-    ;
-    static int ultimoID = -1;
+    
     //static int posicao;
     static int estado = 0;
-    static TabelaDeSimbolos tabelaDeSimbolos = Main.tabelaDeSimbolos;
+    public static TabelaDeSimbolos tabelaDeSimbolos = Main.tabelaDeSimbolos;
     static int valorChar = 0;//, valorCharAnterior;
     static char c = ' ', outroValor = ' ';
     static boolean fimArquivo = false, pegouProxValorChar = false, pegouOutro = false, veioDeConstante = false;
@@ -74,16 +73,11 @@ public class AnalisadorLexico {
         coluna++;
         return br.read();
     }
-
-    public AnalisadorLexico() throws IOException {
-
-        for (Linha a : tabelaDeSimbolos.values()) {
-            int valorDado;
-            if ((valorDado = a.getToken()) > ultimoID) {
-                ultimoID = valorDado;
-            }
-        }
-        while (br.ready() && !fimArquivo) {
+    
+    static Registro nextToken () throws IOException{
+        boolean completadoToken = false;
+        Registro retorno = null;
+        while (br.ready() && !completadoToken && !fimArquivo) {
             if (!pegouProxValorChar) {
                 valorChar = br.read();
                 c = (char) valorChar;
@@ -93,15 +87,12 @@ public class AnalisadorLexico {
             } else {
                 switch (estado) {
                     case 0: //inicial
-                        /*if (c == 'A') {
-                         System.out.println(">>>>" + valorChar + "<<<<>>>>" + (char) valorChar + "<<<<<");
-                         }*/
-                        //System.out.println(">>>>" + valorChar + "<<<<>>>>" + (char) valorChar + "<<<<<");
+                        
                         if (c == ' ' || quebraLinha(valorChar)) {
                             vaiProximo();
                         } else if (Character.isDigit(valorChar)) {
                             estado = 1; // inteiro ou real
-                            // System.out.println("Leu " + c);
+                            
                             l = insereChar(l, c);
                             vaiProximo();
                         } else if (Character.isLetter(c)) {
@@ -118,7 +109,6 @@ public class AnalisadorLexico {
                         } else if (eSimbolo(c)) {
                             vaiProximo();
                             //estado = 3; // simbolos
-                            //l = insereChar(l, c);
                         } else if (c == '=') {
                             estado = 11; //igual
                             l = insereChar(l, c);
@@ -132,7 +122,193 @@ public class AnalisadorLexico {
                             l = insereChar(l, c);
                             vaiProximo();
                         } else {
-                            //System.out.println(">>>>"+valorChar);
+                            erro("Caractere inválido. Não é possível começar um token com o mesmo.");
+                        }
+                        break;
+                    case 1: // inteiro ou real
+                        veioDeConstante = true;
+                                
+                        if (Character.isDigit(c)) {
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        } else if (c == '.') {
+                            l = insereChar(l, c);
+                            estado = 4; //real
+                        } else {
+                            pegouOutro = true;
+                            estado = 3;
+                        }
+                        break;
+                    case 2:
+                        if (Character.isDigit(c) || Character.isLetter(c)) {
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        } else {
+                            estado = 3;
+                            pegouOutro = true;
+                        }
+                        break;
+                    case 3:
+                        completadoToken = true;
+                        if (!possuiTabela(l)) {
+                            if (!veioDeConstante){
+                                tabelaDeSimbolos.put(l, new Registro(l,tabelaDeSimbolos.IDToken));
+                                retorno = new Registro(l, tabelaDeSimbolos.IDToken);//39 -> ID
+                            }else{
+                                retorno = new Registro(l, tabelaDeSimbolos.CONSTToken);
+                            }
+                        }else{
+                            retorno = new Registro(l, tabelaDeSimbolos.get(l).getToken());
+                        }
+                        if (!pegouOutro) { //resolve o primeiro e depois retorna o proximo char    
+                            vaiProximo();
+                            pegouOutro = false;
+                        }
+                        veioDeConstante = false;
+                        l = "";
+                        estado = 0;
+                        break;
+                    case 4:
+
+                        estado = 5;
+                        vaiProximo();
+
+                        break;
+                    case 5:
+                        //System.out.println("Entrou aqui! com +" + c);
+                        if (Character.isDigit(c)) {
+                            l = insereChar(l, c);
+                            estado = 6;
+                        } else if (c == '.') {
+                            erro("Um número não pode conter duas partes fracionárias!");
+                        } else {
+                            estado = 3;
+                        }
+                        vaiProximo();
+                        break;
+                    case 6:
+                        if (Character.isDigit(c)) {
+                            l = insereChar(l, c);
+                            estado = 7;
+                        } else if (c == '.') {
+                            erro("Um número não pode conter duas partes fracionárias!");
+                        } else {
+                            estado = 3;
+                        }
+                        vaiProximo();
+                        break;
+                    case 7:
+                        if (Character.isDigit(c)) {
+                            l = insereChar(l, c);
+                            estado = 8;
+                        } else if (c == '.') {
+                            erro("Um número não pode conter duas partes fracionárias!");
+                        } else {
+                            estado = 3;
+                        }
+                        vaiProximo();
+                        break;
+                    case 8:
+                        if (c == '=' || c == '<') {
+                            insereChar(l, c);
+                            estado = 3;
+                        } else {
+                            estado = 3;
+                            vaiProximo();
+                        }
+                        break;
+                    case 9:
+                        if (c == '}') {
+                            estado = 0;
+                        }
+                        vaiProximo();
+                        break;
+                    case 10:
+                        if (c == '=' || c == '>') {
+                            insereChar(l, c);
+                            estado = 3;
+                        } else {
+                            estado = 3;
+                            //vaiProximo();
+                        }
+                        break;
+                    case 11:
+                        if (c == '=') {
+                            insereChar(l, c);
+                            estado = 3;
+                        } else {
+                            estado = 3;
+                            //vaiProximo();
+                        }
+                        break;
+                    case 12:
+                        if (c == '=') {
+                            estado = 13;
+                            l = insereChar(l, c);
+                        } else if (c != '=') {
+                            estado = 3;
+                        }
+                        break;
+                    case 13:
+                        break;
+                    case 14:
+                        break;
+                    case 15:
+                        break;
+                }
+            }
+
+        }        
+        
+        return retorno;
+    }
+
+    public AnalisadorLexico() throws IOException {
+        while (br.ready() && !fimArquivo) {
+            if (!pegouProxValorChar) {
+                valorChar = br.read();
+                c = (char) valorChar;
+            }
+            if (valorChar == -1) {
+                fimArquivo = true;
+            } else {
+                switch (estado) {
+                    case 0: //inicial
+                        
+                        if (c == ' ' || quebraLinha(valorChar)) {
+                            vaiProximo();
+                        } else if (Character.isDigit(valorChar)) {
+                            estado = 1; // inteiro ou real
+                            
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        } else if (Character.isLetter(c)) {
+                            estado = 2; //identificadores e palavras reservadas
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        } else if (c == '.') {
+                            estado = 4; //real
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        } else if (c == '{') {
+                            estado = 9;
+                            vaiProximo();
+                        } else if (eSimbolo(c)) {
+                            vaiProximo();
+                            //estado = 3; // simbolos
+                        } else if (c == '=') {
+                            estado = 11; //igual
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        } else if (c == '<') {
+                            estado = 10;
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        } else if (c == '>') {
+                            estado = 8;
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        } else {
                             erro("Caractere inválido. Não é possível começar um token com o mesmo.");
                         }
                         break;
@@ -162,12 +338,9 @@ public class AnalisadorLexico {
                     case 3:
 
                         if (!possuiTabela(l)) {
-                            
                             if (!veioDeConstante){
-                            
-                                tabelaDeSimbolos.put(l, new Linha(l,ultimoID++));
+                                tabelaDeSimbolos.put(l, new Registro(l,tabelaDeSimbolos.IDToken));
                             }
-                            
                         }
                         if (!pegouOutro) { //resolve o primeiro e depois retorna o proximo char    
                             vaiProximo();
@@ -272,7 +445,7 @@ public class AnalisadorLexico {
 
     }
 
-    private void erro(String mensagemDeErro) {
+    private static void erro(String mensagemDeErro) {
         //if (linha % 2 == 1){
         //    System.out.println("[lexico][linha = " + ((linha/2)+1) + "][coluna = " + coluna + "]" + mensagemDeErro);
        // }else{
@@ -280,6 +453,8 @@ public class AnalisadorLexico {
       //  }
         System.exit(-1);
     }
+    
+    
     
    
 }
