@@ -15,8 +15,8 @@ import java.util.TreeMap;
  */
 public class TabelaDeSimbolos extends Hashtable<String, Registro> {
 
-    static byte IDToken = 38;
-    static byte CONSTToken = 39;
+    static byte IDToken = 39;
+    static byte CONSTToken = 40;
     
     public TabelaDeSimbolos() {
         carregarPalavrasReservadas();
@@ -93,6 +93,8 @@ public class TabelaDeSimbolos extends Hashtable<String, Registro> {
         this.put("inicio", new Registro("inicio", (byte) 35));
         this.put("fim", new Registro("fim", (byte) 36));
         this.put("Luz", new Registro("Luz", (byte) 37));
+        this.put("Q", new Registro("Q", (byte) 38));//13(0Dh) e 10(0Ah)
+        
         System.out.println("Palavras Reservadas carregadas...");
     }
     
