@@ -5,6 +5,8 @@
 package compila;
 
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -12,10 +14,24 @@ import java.io.IOException;
  */
 public class AnalisadorSintatico {
 
+    public AnalisadorSintatico() throws IOException {
+        try {
+            reg = AnalisadorLexico.nextToken();
+            token = reg.getToken();
+        } catch (IOException ex) {
+            Logger.getLogger(AnalisadorSintatico.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        INICIO();
+    }
+    
+    
+
     public void casaToken(byte tokenEsperado) throws IOException {
-        byte tokenAtual = AnalisadorLexico.nextToken().getToken();
-        if (tokenEsperado != tokenAtual) {
+        if (tokenEsperado != token) {
             erroSintatico();
+        }else{
+            reg = AnalisadorLexico.nextToken();
+            token = reg.getToken();
         }
         /*
          * Procedimento casaToken (Token tokenEsperado)
@@ -32,10 +48,13 @@ public class AnalisadorSintatico {
     }
     StringBuffer sb;
     byte token;
-    String ID, CONST, QUEBRA_DE_LINHA;//AINDA NAO SEI O QUE FAZER
+    Registro reg;
 
     public void INICIO() throws IOException {
-        //preciso ler o primeiro token aqui!
+        /*
+         * Erro que ta dando -> achando enter e esperando por DPonto
+         */
+        System.out.println("inicio");
         while (token != 1
                 || token != 4
                 || token != 2
@@ -46,7 +65,7 @@ public class AnalisadorSintatico {
             DECLARACOES_VARIAVEIS_INICIAIS();
         }
         casaToken((byte) 35);
-        casaToken(QUEBRA_DE_LINHA);
+        casaToken((byte)38);
         while (token != 37
                 || token != 10
                 || token != Main.tabelaDeSimbolos.IDToken
@@ -56,7 +75,7 @@ public class AnalisadorSintatico {
                 || token != 11) {
             CODIGO();
         }
-        casaToken(QUEBRA_DE_LINHA);
+        casaToken((byte)38);
         casaToken((byte) 36);
 
 
@@ -65,7 +84,7 @@ public class AnalisadorSintatico {
     public void DECLARACOES_VARIAVEIS_INICIAIS() throws IOException {
         if (token == 1) {
             casaToken((byte) 1);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
             while (token == Main.tabelaDeSimbolos.IDToken) {
                 casaToken(Main.tabelaDeSimbolos.IDToken);
                 casaToken((byte) 22);
@@ -73,7 +92,7 @@ public class AnalisadorSintatico {
             }
         } else if (token == 4) {
             casaToken((byte) 4);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
             while (token == Main.tabelaDeSimbolos.IDToken) {
                 casaToken(Main.tabelaDeSimbolos.IDToken);
                 casaToken((byte) 22);
@@ -81,7 +100,7 @@ public class AnalisadorSintatico {
             }
         } else if (token == 2) {
             casaToken((byte) 2);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
             while (token == Main.tabelaDeSimbolos.IDToken) {
                 casaToken(Main.tabelaDeSimbolos.IDToken);
                 casaToken((byte) 22);
@@ -89,7 +108,7 @@ public class AnalisadorSintatico {
             }
         } else if (token == 5) {
             casaToken((byte) 5);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
             while (token == Main.tabelaDeSimbolos.IDToken) {
                 casaToken(Main.tabelaDeSimbolos.IDToken);
                 casaToken((byte) 22);
@@ -97,7 +116,7 @@ public class AnalisadorSintatico {
             }
         } else if (token == 3) {
             casaToken((byte) 3);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
             while (token == Main.tabelaDeSimbolos.IDToken) {
                 casaToken(Main.tabelaDeSimbolos.IDToken);
                 casaToken((byte) 22);
@@ -105,7 +124,7 @@ public class AnalisadorSintatico {
             }
         } else if (token == 7) {
             casaToken((byte) 7);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
             while (token == Main.tabelaDeSimbolos.IDToken) {
                 casaToken(Main.tabelaDeSimbolos.IDToken);
                 casaToken((byte) 22);
@@ -113,7 +132,7 @@ public class AnalisadorSintatico {
             }
         } else if (token == 6) {
             casaToken((byte) 6);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
             while (token == Main.tabelaDeSimbolos.IDToken) {
                 casaToken(Main.tabelaDeSimbolos.IDToken);
                 casaToken((byte) 22);
@@ -140,10 +159,10 @@ public class AnalisadorSintatico {
             erroSintatico();
         }
         casaToken((byte) 14);
-        if (token.equals(QUEBRA_DE_LINHA)) {
-            casaToken(QUEBRA_DE_LINHA);
+        if (token == 38) {
+            casaToken((byte)38);
             casaToken((byte) 35);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
             while (token != 37
                     || token != 10
                     || token != Main.tabelaDeSimbolos.IDToken
@@ -154,7 +173,7 @@ public class AnalisadorSintatico {
                 CODIGO();
             }
             casaToken((byte) 36);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
 
         } else if (token == 37
                 || token == 10
@@ -188,10 +207,10 @@ public class AnalisadorSintatico {
             erroSintatico();
         }
         casaToken((byte) 16);
-        if (token.equals(QUEBRA_DE_LINHA)) {
-            casaToken(QUEBRA_DE_LINHA);
+        if (token == 38) {
+            casaToken((byte)38);
             casaToken((byte) 35);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
             while (token != 37
                     || token != 10
                     || token != Main.tabelaDeSimbolos.IDToken
@@ -202,7 +221,7 @@ public class AnalisadorSintatico {
                 CODIGO();
             }
             casaToken((byte) 36);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
 
         } else if (token == 37
                 || token == 10
@@ -222,10 +241,10 @@ public class AnalisadorSintatico {
 
     public void CONDICIONAL_SENAO() throws IOException {
         casaToken((byte) 17);
-        if (token.equals(QUEBRA_DE_LINHA)) {
-            casaToken(QUEBRA_DE_LINHA);
+        if (token==38) {
+            casaToken((byte)38);
             casaToken((byte) 35);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
             while (token != 37
                     || token != 10
                     || token != Main.tabelaDeSimbolos.IDToken
@@ -236,7 +255,7 @@ public class AnalisadorSintatico {
                 CODIGO();
             }
             casaToken((byte) 36);
-            casaToken(QUEBRA_DE_LINHA);
+            casaToken((byte)38);
 
         } else if (token == 37
                 || token == 10
@@ -354,7 +373,7 @@ public class AnalisadorSintatico {
         } else {
             erroSintatico();
         }
-        casaToken(QUEBRA_DE_LINHA);
+        casaToken((byte)38);
     }
 
     public void DPONTO() throws IOException {
@@ -547,4 +566,5 @@ public class AnalisadorSintatico {
             erroSintatico();
         }
     }
+    
 }

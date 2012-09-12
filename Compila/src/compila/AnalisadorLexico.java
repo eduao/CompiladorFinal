@@ -28,6 +28,10 @@ public class AnalisadorLexico {
     static String l = "";
     static int linha = 0;
     static int coluna = 1;
+    
+    public AnalisadorLexico (int x){
+        
+    }
 
     static String insereChar(String l, char c) {
         //l.setLexema();
@@ -35,7 +39,7 @@ public class AnalisadorLexico {
     }
 
     static boolean eSimbolo(char c) {
-
+        
         if (c == '+' || c == '-'
                 || c == ';'
                 || c == '(' || c == ')'
@@ -71,7 +75,9 @@ public class AnalisadorLexico {
 
     static int proximoValorChar() throws IOException {
         coluna++;
-        return br.read();
+        int retorno = br.read();
+        System.out.println("---> [" + (char)retorno + "]  " + (int)retorno);
+        return retorno;
     }
     
     static Registro nextToken () throws IOException{
@@ -88,7 +94,7 @@ public class AnalisadorLexico {
                 switch (estado) {
                     case 0: //inicial
                         
-                        if (c == ' ' || quebraLinha(valorChar)) {
+                        if (c == ' ') {
                             vaiProximo();
                         } else if (Character.isDigit(valorChar)) {
                             estado = 1; // inteiro ou real
@@ -108,7 +114,7 @@ public class AnalisadorLexico {
                             vaiProximo();
                         } else if (eSimbolo(c)) {
                             vaiProximo();
-                            //estado = 3; // simbolos
+                            estado = 3; // simbolos
                         } else if (c == '=') {
                             estado = 11; //igual
                             l = insereChar(l, c);
@@ -121,7 +127,11 @@ public class AnalisadorLexico {
                             estado = 8;
                             l = insereChar(l, c);
                             vaiProximo();
-                        } else {
+                        } else if (c == 13){
+                            estado = 13;
+                            l = insereChar(l, c);
+                            vaiProximo();
+                        }else {
                             erro("Caractere inválido. Não é possível começar um token com o mesmo.");
                         }
                         break;
@@ -150,7 +160,9 @@ public class AnalisadorLexico {
                         break;
                     case 3:
                         completadoToken = true;
-                        if (!possuiTabela(l)) {
+                        if(l.equals((char)13 + (char)10)){
+                            retorno = new Registro("Q", tabelaDeSimbolos.get("Q").getToken());
+                        }else if (!possuiTabela(l)) {
                             if (!veioDeConstante){
                                 tabelaDeSimbolos.put(l, new Registro(l,tabelaDeSimbolos.IDToken));
                                 retorno = new Registro(l, tabelaDeSimbolos.IDToken);//39 -> ID
@@ -250,6 +262,12 @@ public class AnalisadorLexico {
                         }
                         break;
                     case 13:
+                        if (c == 10){
+                            estado = 3;
+                            l = insereChar(l, c);
+                        }else{
+                            erro("O token esperado era uma quebra de linha, o que nao aconteceu.");
+                        }
                         break;
                     case 14:
                         break;
@@ -308,7 +326,7 @@ public class AnalisadorLexico {
                             estado = 8;
                             l = insereChar(l, c);
                             vaiProximo();
-                        } else {
+                        }else {
                             erro("Caractere inválido. Não é possível começar um token com o mesmo.");
                         }
                         break;

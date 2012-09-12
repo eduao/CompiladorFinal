@@ -53,8 +53,8 @@ public class Main {
 
         if (verificarArquivoEntrada(nomeArquivoEntrada = JOptionPane.showInputDialog("Qual o nome do arquivo de teste encontrado na pasta do projeto?", nomeArquivoEntrada))) {
 
-            AnalisadorLexico al = new AnalisadorLexico();
-
+            AnalisadorLexico al = new AnalisadorLexico(0);
+            AnalisadorSintatico as = new AnalisadorSintatico();
 
 
             br.close();
